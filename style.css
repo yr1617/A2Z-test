@@ -158,3 +158,25 @@ main{min-height:100%}
 .l1 .k1,.l2 .k2,.l3 .k3{opacity:.75}
 .shard{position:absolute;left:50%;top:50%;margin:-13px 0 0 -13px;width:26px;height:26px;background:color-mix(in srgb,var(--c) 38%,#FEFEFE);clip-path:polygon(50% 0,100% 100%,0 80%);animation:shard 1s ease-out forwards;pointer-events:none}
 @keyframes shard{to{transform:translate(var(--x),var(--y)) rotate(var(--r));opacity:0}}
+
+/* ---------- 그래픽(SVG) 아이콘 · 신규 체험 ---------- */
+.ic{display:block;width:100%;height:auto}
+.thumb .ic{width:52%;filter:drop-shadow(0 6px 0 rgba(0,0,0,.1))}
+.cat-head .big{width:clamp(80px,14vw,150px)}
+.orb .em{width:clamp(54px,9vw,110px)}
+.item .ic{width:46px;margin:0 auto 4px}
+.item.q{font-size:34px;font-weight:900;color:var(--g2)}
+.pal{width:clamp(60px,10vw,88px)}
+.gift{width:64px}
+.chip .ic{width:26px;height:26px;display:inline-block;vertical-align:middle}
+.plate .base{position:absolute;inset:7%;border-radius:50%;background:var(--b,#eee);box-shadow:inset 0 0 0 6px #0001}
+.plate span{width:clamp(36px,7vw,54px);font-size:0}
+.scene{width:min(440px,100%);height:auto;max-height:52vh}
+.tgc{width:min(520px,100%);height:min(340px,48vh);touch-action:none;background:var(--paper);border-radius:24px;cursor:grab}
+.swy{transform-box:fill-box;transform-origin:50% 0;animation:swy 2.2s ease-in-out infinite alternate}
+@keyframes swy{from{transform:rotate(-7deg)}to{transform:rotate(7deg)}}
+.jarscene .lid{transform-box:fill-box;transition:transform .35s}
+.jarscene.open .lid{transform:translateY(-24px) rotate(-7deg)}
+.jarscene .fj{transition:transform .6s,opacity .6s}
+.jarscene.cmp .fj{transform:translateX(180px);opacity:.5}
+.orb .em{display:block}.thumb{overflow:hidden}
