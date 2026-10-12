@@ -216,6 +216,7 @@ function home() {
     <svg class="cursor" viewBox="0 0 24 24"><path d="M5 2l14 11-6.5 1.2L9.8 21z" fill="#FEFEFE" stroke="#1C1C20" stroke-width="1.5" stroke-linejoin="round"/></svg>
     <div class="tip">🖱️ 행성을 클릭해보세요</div></section>`;
   const sp = $('.space'); $$('.orb', sp).forEach(o => o.onclick = () => location.hash = '#/cat/' + o.dataset.k);
+  space3d(sp);
   tutorial(sp);
 }
 
@@ -231,6 +232,7 @@ async function tutorial(sp) {
       if (stop) break;
       rp.style.left = x + 'px'; rp.style.top = y + 'px';
       rp.animate([{ transform: 'scale(.4)', opacity: 1 }, { transform: 'scale(2)', opacity: 0 }], 700);
+      sp.dispatchEvent(new CustomEvent('pulse', { detail: orbs.indexOf(o) }));
       o.animate([{ scale: 1 }, { scale: .9 }, { scale: 1.08 }, { scale: 1 }], 500);
       await sleep(1200); if (stop) break;
       await cur.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards' }).finished;
@@ -268,3 +270,85 @@ function route() {
 }
 addEventListener('hashchange', route);
 route();
+
+/* ---------------- 메인 3D (Three.js r128) ----------------
+   먹거리=고리 두른 라면 그릇 / 놀거리=고리 두른 게임 컨트롤러 / 패션=고리 두른 쇼핑백
+   각 3D 오브젝트 위에 투명한 .orb 버튼을 겹쳐 클릭·키보드·튜토리얼을 그대로 사용 */
+function space3d(sp) {
+  if (typeof THREE === 'undefined') return;
+  let R; try { R = new THREE.WebGLRenderer({ antialias: true, alpha: true }); } catch (e) { return; }
+  R.setPixelRatio(Math.min(devicePixelRatio, 2)); R.outputEncoding = THREE.sRGBEncoding;
+  const cv = R.domElement; cv.className = 'gl'; sp.insertBefore(cv, $('.hero', sp));
+  const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(45, 1, .1, 100); cam.position.z = 10;
+  scene.add(new THREE.AmbientLight(0xffffff, .8));
+  const dl = new THREE.DirectionalLight(0xffffff, .9); dl.position.set(3, 5, 6); scene.add(dl);
+  const S = r => new THREE.SphereGeometry(r, 32, 24), B = (x, y, z) => new THREE.BoxGeometry(x, y, z);
+  const add = (g, geo, col, pos = [0, 0, 0], sc = [1, 1, 1]) => {
+    const m = new THREE.Mesh(geo, typeof col === 'object' ? col : new THREE.MeshStandardMaterial({ color: col, roughness: .4 }));
+    m.position.set(...pos); m.scale.set(...sc); g.add(m); return m;
+  };
+  const food = g => {
+    add(g, new THREE.LatheGeometry([[0, -.7], [.55, -.7], [.9, -.45], [1.25, .35], [1.32, .5], [1.2, .5], [.85, -.3], [0, -.35]].map(p => new THREE.Vector2(...p)), 48),
+      new THREE.MeshStandardMaterial({ color: 0xFFEA00, roughness: .35, side: THREE.DoubleSide }));
+    add(g, new THREE.CircleGeometry(1.1, 40), 0xE8472B, [0, .3, 0]).rotation.x = -Math.PI / 2;
+    add(g, new THREE.TorusGeometry(.45, .09,10, 30), 0xFFD27A, [.25, .34, -.1]).rotation.x = Math.PI / 2;
+    add(g, S(.3), 0xFEFEFE, [-.4, .4, .2], [1, .7, 1]); add(g, S(.14), 0xFFB300, [-.4, .55, .2]);
+    add(g, S(.25), 0x4CAF50, [.55, .42, .5], [1, .6, 1]);
+    [.3, .6].forEach(z => add(g, new THREE.CylinderGeometry(.04, .04, 2.9, 8), 0x1C1C20, [0, .62, z]).rotation.z = Math.PI / 2);
+  };
+  const play = g => {
+    add(g, S(1), 0x1C94F5, [0, 0, 0], [1.55, .7, .95]);
+    [-1, 1].forEach(s => add(g, S(.55), 0x1C94F5, [s * 1.05, -.5, 0], [.8, 1.25, .9]));
+    add(g, B(.55, .12, .16), 0x1C1C20, [-.7, .62, .05]); add(g, B(.16, .12, .55), 0x1C1C20, [-.7, .62, .05]);
+    [[.2, 0, 0xF65AC2], [-.2, 0, 0xFFEA00], [0, .2, 0xFEFEFE], [0, -.2, 0x1C1C20]].forEach(([x, z, c]) => add(g, S(.12), c, [.75 + x, .6, .05 + z]));
+  };
+  const fashion = g => {
+    add(g, B(1.5, 1.7, .7), 0xF65AC2, [0, -.1, 0]); add(g, B(1.52, .2, .72), 0xFEFEFE, [0, .25, 0]);
+    add(g, new THREE.TorusGeometry(.45, .07, 12, 40, Math.PI), 0x1C1C20, [0, .75, 0]);
+    add(g, B(.7, .4, .02), 0xFFEA00, [0, -.45, .37]); add(g, S(.15), 0x1C94F5, [.55, .55, .45]);
+  };
+  const objs = [['food', food, 0xFFF47A, .45], ['play', play, 0x7CC6FB, .9], ['fashion', fashion, 0xFBA0DE, .12]].map(([k, fn, rc, tx], i) => {
+    const root = new THREE.Group(), tilt = new THREE.Group(), spin = new THREE.Group(), piv = new THREE.Group(), rs = new THREE.Group();
+    fn(spin); tilt.rotation.x = tx; tilt.add(spin); root.add(tilt);
+    add(rs, new THREE.TorusGeometry(2.2, .06, 16, 120), new THREE.MeshStandardMaterial({ color: rc, roughness: .3, metalness: .3 }));
+    add(rs, S(.17), 0xFEFEFE, [2.2, 0, 0]);
+    piv.rotation.set(1.15, 0, (i - 1) * .35); piv.add(rs); root.add(piv); scene.add(root);
+    return { k, root, spin, rs, h: 0, p: 0, s: 1, x: 0, y: 0, b: $(`.orb.${k}`, sp) };
+  });
+  const pos = new Float32Array(900); for (let i = 0; i < 900; i++) pos[i] = i % 3 === 2 ? (Math.random() - 1) * 30 : (Math.random() - .5) * 60;
+  const sg = new THREE.BufferGeometry(); sg.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  const stars = new THREE.Points(sg, new THREE.PointsMaterial({ color: 0xffffff, size: .08, transparent: true, opacity: .8 })); scene.add(stars);
+
+  let W, H, pu;
+  const size = () => {
+    W = sp.clientWidth; H = sp.clientHeight; R.setSize(W, H, false); cam.aspect = W / H; cam.updateProjectionMatrix();
+    const hh = 8.284, w = hh * W / H; pu = H / hh;
+    const port = W / H < .9, s = port ? Math.min(.62, w / 7.5) : Math.min(1, w / 14);
+    const P = port ? [[-w * .24, -2.7], [0, .9], [w * .24, -2.7]] : [[-w * .3, -.6], [0, .4], [w * .3, -.6]];
+    objs.forEach((o, i) => { o.x = P[i][0]; o.y = P[i][1]; o.s = s * (i === 1 ? 1.12 : 1); });
+  };
+  size(); addEventListener('resize', size);
+
+  const mouse = { x: 0, y: 0 }, vec = new THREE.Vector3(); let hov = -1, t0 = performance.now(), raf;
+  sp.addEventListener('pointermove', e => { const r = sp.getBoundingClientRect(); mouse.x = (e.clientX - r.left) / r.width - .5; mouse.y = (e.clientY - r.top) / r.height - .5; });
+  sp.addEventListener('pulse', e => objs[e.detail].p = 1);
+  objs.forEach((o, i) => { o.b.classList.add('d3'); ['pointerenter', 'focus'].forEach(ev => o.b.addEventListener(ev, () => hov = i)); ['pointerleave', 'blur'].forEach(ev => o.b.addEventListener(ev, () => hov = -1)); });
+
+  const tick = t => {
+    if (!sp.isConnected) { removeEventListener('resize', size); R.dispose(); return; }
+    const d = Math.min((t - t0) / 1000, .05); t0 = t;
+    cam.position.x += (mouse.x * 1.4 - cam.position.x) * .05; cam.position.y += (-mouse.y * .9 - cam.position.y) * .05; cam.lookAt(0, 0, 0);
+    stars.rotation.y += d * .01;
+    objs.forEach((o, i) => {
+      o.h += ((hov === i ? 1 : 0) - o.h) * .12; o.p *= .9;
+      o.root.scale.setScalar(o.s * (1 + .14 * o.h - .14 * o.p));
+      o.spin.rotation.y += d * (.5 + o.h * 1.5); o.rs.rotation.z += d * .6;
+      o.root.position.set(o.x, o.y + Math.sin(t / 900 + i * 2) * .12, 0);
+      vec.copy(o.root.position).project(cam);
+      const D = 4.8 * o.s * pu, x = (vec.x * .5 + .5) * W, y = (-vec.y * .5 + .5) * H;
+      Object.assign(o.b.style, { left: x - D / 2 + 'px', top: y - D / 2 + 'px', width: D + 'px', height: D + 'px' });
+    });
+    R.render(scene, cam); raf = requestAnimationFrame(tick);
+  };
+  raf = requestAnimationFrame(tick);
+}
