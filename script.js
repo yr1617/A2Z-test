@@ -148,9 +148,10 @@ const X = {
       st.innerHTML = '<canvas class="tgc"></canvas><p class="hint">잡고 끌어서 비틀고 꺾어보세요</p>';
       const cv = $('canvas', st), x = cv.getContext('2d'), dp = Math.min(devicePixelRatio, 2), w = cv.clientWidth, h = cv.clientHeight;
       cv.width = w * dp; cv.height = h * dp; x.scale(dp, dp);
-      const n = 26, P = [], O = [];
-      for (let i = 0; i < n; i++) { const px = w * .1 + i * w * .8 / (n - 1), py = h / 2 + Math.sin(i * .55) * h * .2; P.push([px, py]); O.push([px, py]); }
-      const L = Math.hypot(P[1][0] - P[0][0], P[1][1] - P[0][1]); let d = -1;
+      const n = 28, P = [], O = [];
+      for (let i = 0; i < n; i++) { const t = 2 * Math.PI * i / n, k = 1 + .28 * Math.sin(3 * t); P.push([w / 2 + w * .3 * k * Math.cos(t), h / 2 + h * .3 * k * Math.sin(t)]); O.push([...P[i]]); }
+      let per = 0; for (let i = 0; i < n; i++) per += Math.hypot(P[(i + 1) % n][0] - P[i][0], P[(i + 1) % n][1] - P[i][1]);
+      const L = per / n; let d = -1;
       const at = e => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
       cv.onpointerdown = e => { const q = at(e); let m = 70; P.forEach((p, i) => { const k = Math.hypot(p[0] - q[0], p[1] - q[1]); if (k < m) { m = k; d = i; } }); cv.setPointerCapture(e.pointerId); beep(300); };
       cv.onpointermove = e => { if (d < 0) return; const q = at(e); P[d] = [q[0], q[1]]; O[d] = [q[0], q[1]]; };
@@ -158,15 +159,15 @@ const X = {
       const fix = (a, b, len, mn) => { const A = P[a], B = P[b], dx = B[0] - A[0], dy = B[1] - A[1], s = Math.hypot(dx, dy) || .001; if (mn && s >= len) return; const f = (s - len) / s, wa = a === d ? 0 : 1, wb = b === d ? 0 : 1, t = wa + wb; if (!t) return; A[0] += dx * f * wa / t; A[1] += dy * f * wa / t; B[0] -= dx * f * wb / t; B[1] -= dy * f * wb / t; };
       const draw = () => {
         x.clearRect(0, 0, w, h); x.lineCap = x.lineJoin = 'round'; const lw = w * .05;
-        for (let i = 0; i < n - 1; i++) { x.strokeStyle = (i >> 1) % 2 ? '#9CCBF5' : '#F7A8D8'; x.lineWidth = lw; x.beginPath(); x.moveTo(...P[i]); x.lineTo(...P[i + 1]); x.stroke(); }
-        x.strokeStyle = 'rgba(255,255,255,.5)'; x.lineWidth = lw * .2; x.beginPath(); P.forEach((p, i) => x[i ? 'lineTo' : 'moveTo'](p[0] - lw * .15, p[1] - lw * .2)); x.stroke();
+        for (let i = 0; i < n; i++) { x.strokeStyle = (i >> 1) % 2 ? '#9CCBF5' : '#F7A8D8'; x.lineWidth = lw; x.beginPath(); x.moveTo(...P[i]); x.lineTo(...P[(i + 1) % n]); x.stroke(); }
+        x.strokeStyle = 'rgba(255,255,255,.5)'; x.lineWidth = lw * .2; x.beginPath(); P.forEach((p, i) => x[i ? 'lineTo' : 'moveTo'](p[0] - lw * .15, p[1] - lw * .2)); x.closePath(); x.stroke();
       };
       const step = () => {
         if (!cv.isConnected) return;
         P.forEach((p, i) => { if (i === d) return; const vx = (p[0] - O[i][0]) * .94, vy = (p[1] - O[i][1]) * .94; O[i] = [p[0], p[1]]; p[0] += vx; p[1] += vy; });
         for (let k = 0; k < 8; k++) {
-          for (let i = 0; i < n - 1; i++) fix(i, i + 1, L, 0);
-          for (let i = 0; i < n - 2; i++) fix(i, i + 2, L * 1.8, 1);
+          for (let i = 0; i < n; i++) fix(i, (i + 1) % n, L, 0);
+          for (let i = 0; i < n; i++) fix(i, (i + 2) % n, L * 1.8, 1);
           P.forEach(p => { p[0] = Math.min(w - 24, Math.max(24, p[0])); p[1] = Math.min(h - 24, Math.max(24, p[1])); });
         }
         draw(); requestAnimationFrame(step);
