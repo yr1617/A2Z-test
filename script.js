@@ -17,17 +17,13 @@ const CATS = {
 const T = {
   play: [
     { t: '말랑이 · 탱글 · 키캡', e: '🫧', tag: '손맛 트렌드', type: 'squish',
-      lead: '꾹 누르면 쫀득, 놓으면 탱글, 누르면 딸깍. 손끝으로 노는 촉감 장난감이 다시 인기예요.',
-      y: '스트레스를 풀고, 책상 위를 꾸미고, 영상으로 소리까지 즐기는 ‘손맛 수집’ 문화예요.',
+      lead: '꾹 눌러 쫀득한 말랑이, 마디마디 비틀고 꺾는 탱글 피젯 토이, 눌러서 딸깍 키캡까지. 손끝으로 노는 장난감이 다시 인기예요.',
+      y: '손을 가만두지 않는 ‘피젯 토이’로 스트레스를 풀고, 책상 위를 꾸미고, 소리까지 영상으로 즐겨요.',
       o: '어릴 적 슬라임·뽁뽁이와 같은 마음이에요. 지금은 모으고 자랑하는 재미가 더해졌어요.' },
-    { t: 'AI에게 나에 대해 물어보기', e: '🤖', tag: '대화 트렌드', type: 'chat',
-      qa: [['내 성격 맞혀볼래?', '대화 말투를 보니 호기심이 많고 새로운 걸 먼저 시도하는 편 같아요. 맞나요? 😄'],
-           ['오늘 점심 뭐 먹지?', '날이 쌀쌀하니 따끈한 국물 요리 어때요? 마라탕이나 칼국수를 추천해요.'],
-           ['요즘 애들 말 알려줘', '“찐이다”는 진짜 좋다, “킹받네”는 몹시 짜증난다는 뜻으로 쓰여요.'],
-           ['부모님과 대화 팁은?', '결론보다 안부를 먼저 물어보세요. 사진 한 장 보내는 것도 좋은 시작이에요.']],
-      lead: 'AI에게 내 취향과 고민을 털어놓고, 나를 어떻게 보는지 물어보는 놀이예요.',
-      y: '운세나 심리테스트처럼 ‘나를 알아가는 재미’로 쓰고, 결과를 친구와 공유해요.',
-      o: '말동무에게 이야기하듯 편하게 시작해도 돼요. 정답을 찾기보다 대화를 즐기는 게 핵심이에요.' },
+    { t: '왁뿌볼', e: '🔮', tag: '손맛 트렌드', type: 'wax',
+      lead: '말랑이 겉에 왁스를 부어 굳힌 장난감이에요. 꽉 누르면 겉껍질이 와작 깨지고, 속의 말랑한 촉감이 드러나요.',
+      y: '‘깨지는 소리’와 ‘말랑한 속’의 반전이 포인트. 깨는 순간을 영상으로 찍어 공유해요.',
+      o: '얼음을 깨 먹거나 과자 껍질을 깨는 쾌감과 닮았어요. 바삭한 겉과 말랑한 속의 대비를 즐기는 놀이예요.' },
     { t: '먼작귀', e: '🐹', tag: '캐릭터 트렌드', type: 'crew',
       pals: [['🐹', '우와~ 만났다!'], ['🐰', '으쌰으쌰 힘내자!'], ['🐱', '왠지 기분 좋은 날이야'], ['🦔', '조금 떨리지만 괜찮아'], ['🐻', '맛있는 거 먹으러 갈까?']],
       lead: '‘먼가 작고 귀여운 녀석’의 줄임말. 작은 캐릭터들의 소소한 일상이 위로가 돼요.',
@@ -45,20 +41,19 @@ const T = {
       lead: '새콤한 토마토와 얼얼한 마라를 합친 국물. 취향대로 재료를 넣어 나만의 한 그릇을 만들어요.',
       y: '‘나만의 조합’을 공유하는 커스텀 문화가 핵심이에요.',
       o: '김치찌개에 라면사리를 넣던 것처럼, 익숙한 맛에 새로움을 더하는 방식이에요.' },
-    { t: '한정선', e: '🎁', tag: '임시 콘텐츠', type: 'rush', item: '🎁', tmp: 1,
-      lead: '한정 수량, 한정 기간 메뉴를 사려고 줄을 서는 ‘오픈런’을 체험해요. (프로토타입용 임시 설명)',
-      y: '‘지금 아니면 못 먹는다’는 희소성이 구매와 인증 욕구를 키워요.',
-      o: '명절 앞 떡집 줄서기와 비슷해요. 기다림 자체가 이야기가 되는 거예요.' },
+    { t: '한정선', e: '🍓', tag: '한정 간식', type: 'rush', item: ['🍓', '🍊', '🍇', '🍑'],
+      lead: '과일이 통째로 들어간 쫀득한 찹쌀떡이에요. 한정 수량이라 나오자마자 사라져서 ‘오픈런’까지 벌어져요.',
+      y: '잘랐을 때 보이는 과일 단면과 ‘지금 아니면 못 먹는다’는 희소성이 인증 욕구를 키워요.',
+      o: '명절 앞 떡집 줄서기와 닮았어요. 익숙한 찹쌀떡에 과일을 더해 새로워진 간식이에요.' },
     { t: '피자설기', e: '🍕', tag: '퓨전 디저트', type: 'build',
       groups: [{ n: '토핑', items: [['🍅', '토마토'], ['🧀', '치즈'], ['🫒', '올리브'], ['🌽', '콘'], ['🥓', '베이컨']] }],
       lead: '쫀득한 설기 떡 위에 피자 토핑을 얹은 퓨전 간식이에요. 토핑을 올려 완성해보세요.',
       y: '전통과 양식이 만나는 ‘뉴트로 퓨전’이 인기 포인트예요.',
       o: '떡은 낯익고 토핑은 새로워요. 입맛이 다른 세대가 함께 나눠 먹기 좋아요.' },
-    { t: '리센느빵', e: '🥐', tag: '임시 콘텐츠', type: 'build', tmp: 1,
-      groups: [{ n: '쟁반에 담기', items: [['🥐', '크루아상'], ['🍞', '식빵'], ['🥖', '바게트'], ['🥯', '베이글'], ['🧁', '컵케이크']] }],
-      lead: '쟁반 가득 빵을 고르는 베이커리 투어 감각의 체험이에요. (프로토타입용 임시 설명)',
-      y: '빵집을 찾아다니는 ‘빵지순례’가 하나의 여가가 됐어요.',
-      o: '동네 빵집 가는 즐거움을 도시 전체로 넓힌 거예요.' },
+    { t: '리센느빵', e: '🍞', tag: '편의점 콜라보', type: 'hunt',
+      lead: '아이돌 리센느와 협업해 편의점에서 파는 빵이에요. 진열대를 뒤져 협업 빵을 찾아보세요.',
+      y: '좋아하는 아이돌과 협업한 상품을 사려고 편의점을 찾아다니는 ‘굿즈 같은 간식’ 문화예요.',
+      o: '좋아하는 가수 이름이 붙은 과자나 빵을 사 먹던 추억과 닮았어요. 간식이 팬심을 나누는 방법이 된 거예요.' },
   ],
   fashion: [
     { t: '옥', e: '📿', tag: '임시 콘텐츠', type: 'cust', tmp: 1,
@@ -101,6 +96,7 @@ const X = {
     chips(bar, [['m', '말랑이'], ['t', '탱글'], ['k', '키캡']], mode => {
       n = 0;
       if (mode === 'k') return keys();
+      if (mode === 't') return tangle();
       st.innerHTML = `<div class="blobs ${mode}">${PAL.map(c => `<div class="blob" style="background:${c}"></div>`).join('')}</div><div class="count">만진 횟수 <b id="n">0</b></div><p class="hint">${mode === 'm' ? '꾹 누르고 있다가 놓아보세요' : '마우스를 올리면 탱글탱글 흔들려요'}</p>`;
       $$('.blob', st).forEach(b => {
         const up = () => { if (b.classList.contains('sq')) { b.classList.remove('sq'); bounce(b); $('#n', st).textContent = ++n; } };
@@ -108,6 +104,14 @@ const X = {
         b.onpointerup = up; b.onpointerleave = up;
       });
     });
+    function tangle() {
+      const rot = Array(8).fill(0), paint = () => $$('.tg', st).forEach((t, i) => t.style.setProperty('--r', rot[i] + 'deg'));
+      st.innerHTML = `<div class="tangle">${rot.map((_, i) => `<button class="tg" style="--c:${PAL[i % 6]}" aria-label="마디 ${i + 1}"><i></i></button>`).join('')}</div><div class="grp"><button class="chip" id="sh">섞기</button><button class="chip" id="fl">펴기</button></div><p class="hint">마디를 눌러 비틀고 꺾어보세요</p>`;
+      $$('.tg', st).forEach((t, i) => t.onclick = () => { rot[i] += 90; paint(); beep(300 + i * 40); });
+      $('#sh', st).onclick = () => { rot.forEach((_, i) => rot[i] += 90 * (1 + Math.floor(Math.random() * 3))); paint(); beep(420); };
+      $('#fl', st).onclick = () => { rot.forEach((r, i) => rot[i] = Math.ceil(r / 360) * 360); paint(); };
+      paint();
+    }
     function keys() {
       let th = 0; const TH = [['#FFEA00', '#1C94F5', '#F65AC2'], ['#FEFEFE', '#E1E5EA', '#B9BFC9'], ['#7BE0B0', '#FFB36B', '#B79CFF']];
       const L = ['A', '2', 'Z', 'T', 'R', 'E', 'N', 'D'];
@@ -116,6 +120,46 @@ const X = {
       paint(); $('#th', st).onclick = () => { th = (th + 1) % 3; paint(); };
       $$('.key', st).forEach((k, i) => k.onpointerdown = () => { beep(260 + i * 50); k.classList.add('dn'); setTimeout(() => k.classList.remove('dn'), 120); });
     }
+  },
+
+  wax(st, bar) {
+    const crack = () => { try { ac = ac || new AudioContext(); const n = ac.sampleRate * .12, b = ac.createBuffer(1, n, ac.sampleRate), d = b.getChannelData(0); for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 3); const s = ac.createBufferSource(), g = ac.createGain(); g.gain.value = .3; s.buffer = b; s.connect(g).connect(ac.destination); s.start(); } catch (e) {} };
+    let iv, hold, broken, col;
+    const build = () => {
+      clearInterval(iv); hold = 0; broken = false; col = PAL[Math.floor(Math.random() * 6)];
+      st.innerHTML = `<div class="waxwrap"><div class="wax" id="wx" style="--c:${col}"><div class="shell"><svg viewBox="0 0 100 100" fill="none" stroke="#1C1C20" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path class="k1" d="M52 6 L45 28 L55 40 L48 58"/><path class="k1" d="M55 40 L74 46"/><path class="k2" d="M30 20 L38 38 L24 52 L30 74"/><path class="k2" d="M48 58 L66 72 L62 92"/><path class="k3" d="M80 24 L70 34 L84 52 L76 70"/><path class="k3" d="M24 52 L8 56"/></svg></div></div></div><div class="count" id="pr">꾹 눌러보세요</div><p class="hint">누르고 있을수록 껍질에 금이 가요 (소리 켜기)</p>`;
+      const wx = $('#wx', st), pr = $('#pr', st), wrap = wx.parentElement;
+      const shatter = () => {
+        $('.shell', wx).remove();
+        for (let i = 0; i < 14; i++) { const a = Math.random() * 6.28, d = 90 + Math.random() * 90; wrap.insertAdjacentHTML('beforeend', `<i class="shard" style="--x:${Math.cos(a) * d}px;--y:${Math.sin(a) * d}px;--r:${Math.random() * 360}deg;--c:${col}"></i>`); }
+        setTimeout(() => $$('.shard', wrap).forEach(x => x.remove()), 1100);
+      };
+      const stop = () => { clearInterval(iv); if (wx.classList.contains('sq')) { wx.classList.remove('sq'); bounce(wx); } };
+      wx.onpointerdown = () => {
+        wx.classList.add('sq'); beep(160);
+        iv = setInterval(() => {
+          hold++; if (broken) return;
+          if (hold === 4) { wx.classList.add('l1'); crack(); pr.textContent = '사삭… 금이 갔어요'; }
+          if (hold === 8) { wx.classList.add('l2'); crack(); pr.textContent = '조금만 더!'; }
+          if (hold === 12) { wx.classList.add('l3'); crack(); }
+          if (hold === 15) { broken = true; shatter(); crack(); pr.textContent = '와작! 속은 말랑말랑 😮'; }
+        }, 130);
+      };
+      wx.onpointerup = stop; wx.onpointerleave = stop;
+    };
+    bar.innerHTML = '<button class="chip" id="nw">새 왁뿌볼 꺼내기</button>'; $('#nw', bar).onclick = build; build();
+  },
+
+  hunt(st, bar, c) {
+    const R = ['🥐', '🥖', '🥯', '🥪', '🍙', '🍘'], N = 12, win = new Set(); let found = 0;
+    while (win.size < 3) win.add(Math.floor(Math.random() * N));
+    st.innerHTML = `<div class="shelf4">${Array.from({ length: N }, (_, i) => `<button class="item" data-i="${i}">❔</button>`).join('')}</div><div class="count">협업 빵 <b id="n">0</b>/3</div><p class="hint" id="msg">진열대를 눌러 협업 빵을 찾아보세요</p>`;
+    $$('.item', st).forEach(b => b.onclick = () => {
+      if (b.dataset.o) return; b.dataset.o = 1;
+      if (win.has(+b.dataset.i)) { b.innerHTML = '🍞<small>협업!</small>'; b.classList.add('in'); $('#n').textContent = ++found; beep(800); if (found === 3) $('#msg').textContent = '모두 찾았어요! 🎉'; }
+      else { b.textContent = R[Math.floor(Math.random() * R.length)]; beep(300); }
+    });
+    bar.innerHTML = '<button class="chip" id="rs">진열대 새로고침</button>'; $('#rs').onclick = () => X.hunt(st, bar, c);
   },
 
   chat(st, bar, c) {
@@ -175,10 +219,10 @@ const X = {
   },
 
   rush(st, bar, c) {
-    st.innerHTML = `<div class="count" id="sc">준비됐나요?</div><div class="field" id="f"><button class="gift" id="g" style="left:50%;top:50%" hidden>${c.item}</button></div><button class="bigbtn" id="go">오픈런 시작! (8초)</button><p class="hint">움직이는 상품을 최대한 많이 잡으세요</p>`;
+    st.innerHTML = `<div class="count" id="sc">준비됐나요?</div><div class="field" id="f"><button class="gift" id="g" style="left:50%;top:50%" hidden>${[].concat(c.item)[0]}</button></div><button class="bigbtn" id="go">오픈런 시작! (8초)</button><p class="hint">움직이는 상품을 최대한 많이 잡으세요</p>`;
     bar.innerHTML = '<span class="hint">한정 수량이 모두 소진되기 전에!</span>';
     const g = $('#g'), sc = $('#sc'); let s = 0, t = 0, iv;
-    const mv = () => { g.style.left = 10 + Math.random() * 80 + '%'; g.style.top = 12 + Math.random() * 76 + '%'; };
+    const mv = () => { const fr = [].concat(c.item); g.textContent = fr[Math.floor(Math.random() * fr.length)]; g.style.left = 10 + Math.random() * 80 + '%'; g.style.top = 12 + Math.random() * 76 + '%'; };
     g.onclick = () => { s++; beep(800); mv(); sc.textContent = `득템 ${s}개 · 남은 시간 ${t.toFixed(0)}초`; };
     $('#go').onclick = () => {
       clearInterval(iv); s = 0; t = 8; g.hidden = false; mv();
@@ -210,8 +254,7 @@ $('.logo').innerHTML = LOGO;
 
 function home() {
   app.innerHTML = `<section class="view space"><div class="stars"></div><div class="stars b"></div>
-    <div class="hero"><h1>모든 세대가 함께 노는<br>트렌드 우주</h1><p>궁금한 행성을 눌러 여행을 시작하세요</p></div>
-    ${Object.keys(CATS).map(k => `<button class="orb ${k}" data-k="${k}" aria-label="${CATS[k].n}"><span class="em">${CATS[k].e}</span><span class="lb">${CATS[k].n}</span></button>`).join('')}
+        ${Object.keys(CATS).map(k => `<button class="orb ${k}" data-k="${k}" aria-label="${CATS[k].n}"><span class="em">${CATS[k].e}</span><span class="lb">${CATS[k].n}</span></button>`).join('')}
     <div class="ripple"></div>
     <svg class="cursor" viewBox="0 0 24 24"><path d="M5 2l14 11-6.5 1.2L9.8 21z" fill="#FEFEFE" stroke="#1C1C20" stroke-width="1.5" stroke-linejoin="round"/></svg>
     <div class="tip">🖱️ 행성을 클릭해보세요</div></section>`;
@@ -278,7 +321,7 @@ function space3d(sp) {
   if (typeof THREE === 'undefined') return;
   let R; try { R = new THREE.WebGLRenderer({ antialias: true, alpha: true }); } catch (e) { return; }
   R.setPixelRatio(Math.min(devicePixelRatio, 2)); R.outputEncoding = THREE.sRGBEncoding;
-  const cv = R.domElement; cv.className = 'gl'; sp.insertBefore(cv, $('.hero', sp));
+  const cv = R.domElement; cv.className = 'gl'; sp.insertBefore(cv, $('.orb', sp));
   const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(45, 1, .1, 100); cam.position.z = 10;
   scene.add(new THREE.AmbientLight(0xffffff, .8));
   const dl = new THREE.DirectionalLight(0xffffff, .9); dl.position.set(3, 5, 6); scene.add(dl);
