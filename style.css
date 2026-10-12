@@ -153,3 +153,4 @@ main{min-height:100%}
   .band.dark{padding-top:104px}
 }
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important}}
+.deco{display:none!important}
