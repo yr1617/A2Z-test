@@ -370,15 +370,8 @@ const X = {
 const app = $('#app'), nav = $('#nav');
 $('.logo').innerHTML = LOGO;
 
-function deco() {
-  const N = Object.values(T).flat().map(t => t.t);
-  const P = [[3, 9, -14], [17, 2, 9], [79, 5, 15], [90, 22, -11], [1, 50, 12], [91, 54, -8], [8, 76, -10], [27, 84, 13], [63, 82, -13], [83, 76, 9]];
-  const F = ['var(--paper)', 'var(--g1)', 'var(--food-s)', 'var(--play-s)', 'var(--fash-s)'], B = ['--food', '--play', '--fash'];
-  return P.map((p, i) => `<div class="deco" style="left:${p[0]}%;top:${p[1]}%;rotate:${p[2]}deg;background:${F[i % 5]};box-shadow:inset 0 0 0 3px var(${B[i % 3]})">${N[(i * 5) % N.length]}</div>`).join('');
-}
-
 function home() {
-  app.innerHTML = `<section class="view space">${deco()}
+  app.innerHTML = `<section class="view space">
         ${Object.keys(CATS).map(k => `<button class="orb ${k}" data-k="${k}" aria-label="${CATS[k].n}"><span class="em">${ic(CATS[k].i)}</span><span class="lb">${CATS[k].n}</span></button>`).join('')}
     <div class="ripple"></div>
     <svg class="cursor" viewBox="0 0 24 24"><path d="M5 2l14 11-6.5 1.2L9.8 21z" fill="#FEFEFE" stroke="#1C1C20" stroke-width="1.5" stroke-linejoin="round"/></svg>
