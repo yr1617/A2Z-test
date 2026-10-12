@@ -1,11 +1,13 @@
-/* A2Z prototype — 해시 라우팅 SPA (#/ , #/cat/food , #/t/food/0) */
+/* A2Z prototype — Cards Against Humanity Style applied */
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-const PAL = ['#FFEA00', '#1C94F5', '#F65AC2', '#7BE0B0', '#FFB36B', '#B79CFF'];
-const K = '#1C1C20', W = '#FEFEFE';
 
-const LOGO = `<svg viewBox="0 0 132 40" role="img" aria-label="A2Z"><circle cx="9" cy="31" r="5" fill="#FFEA00"/><circle cx="20" cy="31" r="5" fill="#1C94F5"/><circle cx="31" cy="31" r="5" fill="#F65AC2"/><text x="0" y="24" font-family="SUIT Variable,SUIT,sans-serif" font-weight="900" font-size="26" letter-spacing="-1.5" fill="currentColor">A2Z</text><text x="64" y="23" font-family="SUIT Variable,SUIT,sans-serif" font-weight="700" font-size="11" fill="#868D99">에이투지</text></svg>`;
+/* 주조색 3종 유지 (#FFEA00, #1C94F5, #F65AC2) */
+const PAL = ['#FFEA00', '#1C94F5', '#F65AC2', '#7BE0B0', '#FFB36B', '#B79CFF'];
+const K = '#000000', W = '#ffffff';
+
+const LOGO = `<svg viewBox="0 0 132 40" role="img" aria-label="A2Z"><circle cx="9" cy="31" r="5" fill="#FFEA00"/><circle cx="20" cy="31" r="5" fill="#1C94F5"/><circle cx="31" cy="31" r="5" fill="#F65AC2"/><text x="0" y="24" font-family="'Helvetica Neue LT', 'Helvetica Neue', sans-serif" font-weight="800" font-size="26" letter-spacing="-1.5" fill="currentColor">A2Z</text><text x="64" y="23" font-family="'Helvetica Neue LT', 'Helvetica Neue', sans-serif" font-weight="800" font-size="11" fill="#868D99">에이투지</text></svg>`;
 
 /* ---------------- SVG 아이콘 (48x48) ---------------- */
 const I = {
@@ -136,14 +138,13 @@ const X = {
       if (mode === 'k') return keys();
       if (mode === 't') return tangle();
       n = 0;
-      st.innerHTML = `<div class="blobs">${PAL.map(c => `<div class="blob" style="background:${c}"></div>`).join('')}</div><div class="count">만진 횟수 <b id="n">0</b></div><p class="hint">꾹 누르고 있다가 놓아보세요</p>`;
+      st.innerHTML = `<div class="blobs">${PAL.map(c => `<div class="blob" style="background:${c}"></div>`).join('')}</div><div class="count">만진 횟수 <b id="n">0</b></div><p class="hint">꾹 눌러보세요</p>`;
       $$('.blob', st).forEach(b => {
         const up = () => { if (b.classList.contains('sq')) { b.classList.remove('sq'); bounce(b); $('#n', st).textContent = ++n; } };
         b.onpointerdown = () => { b.classList.add('sq'); beep(180); };
         b.onpointerup = up; b.onpointerleave = up;
       });
     });
-    /* 탱글: 마디가 이어진 플라스틱 줄을 끌어서 비틀고 꺾는 물리 시뮬레이션 */
     function tangle() {
       st.innerHTML = '<canvas class="tgc"></canvas><p class="hint">잡고 끌어서 비틀고 꺾어보세요</p>';
       const cv = $('canvas', st), x = cv.getContext('2d'), dp = Math.min(devicePixelRatio, 2), w = cv.clientWidth, h = cv.clientHeight;
@@ -177,7 +178,7 @@ const X = {
       let th = 0; const TH = [['#FFEA00', '#1C94F5', '#F65AC2'], ['#FEFEFE', '#E1E5EA', '#B9BFC9'], ['#7BE0B0', '#FFB36B', '#B79CFF']];
       const L = ['A', '2', 'Z', 'T', 'R', 'E', 'N', 'D'];
       const paint = () => $$('.key', st).forEach((k, i) => k.style.background = TH[th][i % 3]);
-      st.innerHTML = `<div class="keys">${L.map(l => `<button class="key">${l}</button>`).join('')}</div><button class="bigbtn" id="th">키캡 색상 바꾸기</button><p class="hint">눌러서 딸깍 소리를 들어보세요 (소리 켜기)</p>`;
+      st.innerHTML = `<div class="keys">${L.map(l => `<button class="key">${l}</button>`).join('')}</div><button class="bigbtn" id="th">키캡 색상 바꾸기</button><p class="hint">눌러서 딸깍 소리를 들어보세요</p>`;
       paint(); $('#th', st).onclick = () => { th = (th + 1) % 3; paint(); };
       $$('.key', st).forEach((k, i) => k.onpointerdown = () => { beep(260 + i * 50); k.classList.add('dn'); setTimeout(() => k.classList.remove('dn'), 120); });
     }
@@ -188,7 +189,7 @@ const X = {
     let iv, hold, broken, col;
     const build = () => {
       clearInterval(iv); hold = 0; broken = false; col = PAL[Math.floor(Math.random() * 6)];
-      st.innerHTML = `<div class="waxwrap"><div class="wax" id="wx" style="--c:${col}"><div class="shell"><svg viewBox="0 0 100 100" fill="none" stroke="${K}" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path class="k1" d="M52 6 L45 28 L55 40 L48 58"/><path class="k1" d="M55 40 L74 46"/><path class="k2" d="M30 20 L38 38 L24 52 L30 74"/><path class="k2" d="M48 58 L66 72 L62 92"/><path class="k3" d="M80 24 L70 34 L84 52 L76 70"/><path class="k3" d="M24 52 L8 56"/></svg></div></div></div><div class="count" id="pr">꾹 눌러보세요</div><p class="hint">누르고 있을수록 껍질에 금이 가요 (소리 켜기)</p>`;
+      st.innerHTML = `<div class="waxwrap"><div class="wax" id="wx" style="--c:${col}"><div class="shell"><svg viewBox="0 0 100 100" fill="none" stroke="${K}" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path class="k1" d="M52 6 L45 28 L55 40 L48 58"/><path class="k1" d="M55 40 L74 46"/><path class="k2" d="M30 20 L38 38 L24 52 L30 74"/><path class="k2" d="M48 58 L66 72 L62 92"/><path class="k3" d="M80 24 L70 34 L84 52 L76 70"/><path class="k3" d="M24 52 L8 56"/></svg></div></div></div><div class="count" id="pr">꾹 눌러보세요</div><p class="hint">누르고 있을수록 껍질에 금이 가요</p>`;
       const wx = $('#wx', st), pr = $('#pr', st), wrap = wx.parentElement;
       const shatter = () => {
         $('.shell', wx).remove();
@@ -226,7 +227,7 @@ const X = {
     $$('.item', st).forEach(b => b.onclick = () => {
       const i = +b.dataset.i;
       if (bag.has(i)) { bag.delete(i); b.classList.remove('in'); } else {
-        if (upd() + c.items[i][2] > c.budget) { b.classList.add('shake'); setTimeout(() => b.classList.remove('shake'), 400); $('#msg').textContent = '예산이 부족해요! 흥정은 동묘의 묘미죠'; return; }
+        if (upd() + c.items[i][2] > c.budget) { b.classList.add('shake'); setTimeout(() => b.classList.remove('shake'), 400); $('#msg').textContent = '예산이 부족해요!'; return; }
         bag.add(i); b.classList.add('in'); beep(500);
       }
       const s = upd(); $('#msg').textContent = s ? `득템 ${bag.size}개 완료!` : '다시 골라보세요';
@@ -279,7 +280,6 @@ const X = {
     bar.innerHTML = '<button class="chip" id="rs">진열대 새로고침</button>'; $('#rs').onclick = () => X.hunt(st, bar, c);
   },
 
-  /* 메지루시: 우산·가방·텀블러에 투명 링 캐릭터 참 달기 */
   tag(st, bar) {
     const IT = { umb: ['우산', [158, 270]], bag: ['가방', [220, 122]], tum: ['텀블러', [259, 150]] };
     const CH = [['#FFB36B', 0], ['#F7B6D8', 1], ['#B79CFF', 2], ['#7BE0B0', 0], ['#FFE16B', 2]];
@@ -305,7 +305,6 @@ const X = {
     draw();
   },
 
-  /* 옥: 빛에 비춰보는 반투명 옥 소품 */
   jade(st, bar) {
     const TN = [['백옥', '#F2FBF6', '#CDEBDB', '#8FC4A9'], ['비취옥', '#C9F5E1', '#5FCFA0', '#1F8F65'], ['녹옥', '#8FDCB0', '#2FA06A', '#14603F'], ['자옥', '#EBDDFB', '#B79CFF', '#6E4FB5']];
     const NM = ['팔찌', '구슬 팔찌', '펜던트', '반지']; let ti = 1, it = 0;
@@ -325,21 +324,19 @@ const X = {
     bar.innerHTML = rowOf('소품', NM.map((n, i) => `<button class="chip${i ? '' : ' on'}" data-i="${i}">${n}</button>`).join('')) + rowOf('옥빛', TN.map((t, i) => `<button class="chip${i === 1 ? ' on' : ''}" data-t="${i}">${t[0]}</button>`).join('')); colBar(bar);
     bar.onclick = e => {
       const b = e.target.closest('.chip'); if (!b) return;
-      if (b.dataset.i) { it = +b.dataset.i; $$('[data-i]', bar).forEach(x => x.classList.toggle('on', x === b)); }
-      if (b.dataset.t) { ti = +b.dataset.t; $$('[data-t]', bar).forEach(x => x.classList.toggle('on', x === b)); }
+      if (b.dataset.i) { it = +b.dataset.i; $$('[data-i]', bar).forEach(x => x.classList.toggle('on', x === b)); }       if (b.dataset.t) { ti = +b.dataset.t; $$('[data-t]', bar).forEach(x => x.classList.toggle('on', x === b)); }
       draw(); beep(600);
     };
     draw();
   },
 
-  /* 장독대 텀블러: 장독대와 텀블러를 같은 유약 색으로 보고, 겹쳐서 닮은꼴 확인 */
   jar(st, bar) {
     const GL = [['장독 갈색', '#4A2514', '#8A4B2C', '#C77A4A'], ['황토', '#8C5A30', '#C98A55', '#E4B07A'], ['먹갈색', '#1C1210', '#3C2A22', '#6A4A3A'], ['올리브 유약', '#3D3C1E', '#6B6A3A', '#9A9A56']]; let g = 0;
     const paint = () => { const t = GL[g]; $('#jg', st).innerHTML = `<stop offset="0" stop-color="${t[1]}"/><stop offset=".35" stop-color="${t[2]}"/><stop offset=".5" stop-color="${t[3]}"/><stop offset=".7" stop-color="${t[2]}"/><stop offset="1" stop-color="${t[1]}"/>`; };
     st.innerHTML = `<svg id="sc" class="scene jarscene" viewBox="0 0 340 240"><defs><linearGradient id="jg"></linearGradient></defs>
       <g class="fj"><g class="lid"><ellipse cx="80" cy="50" rx="38" ry="10" fill="url(#jg)"/><rect x="72" y="30" width="16" height="14" rx="5" fill="${K}"/></g><path d="M52 58H108L118 72C150 92 156 136 140 172C132 196 108 206 80 206C52 206 28 196 20 172C4 136 10 92 42 72z" fill="url(#jg)"/></g>
       <g transform="translate(180 0)"><g class="lid"><rect x="40" y="38" width="80" height="18" rx="8" fill="${K}"/><rect x="74" y="22" width="12" height="18" rx="4" fill="${K}"/></g><path d="M122 86H138Q156 86 156 106V130Q156 150 138 150H120" stroke="${K}" stroke-width="9" fill="none"/><path d="M46 58H114L122 178Q122 206 96 206H64Q38 206 38 178z" fill="url(#jg)"/></g>
-      <text x="80" y="230" text-anchor="middle" font-size="14" font-weight="700" fill="${K}" font-family="SUIT Variable,sans-serif">장독대</text><text x="260" y="230" text-anchor="middle" font-size="14" font-weight="700" fill="${K}" font-family="SUIT Variable,sans-serif">텀블러</text></svg><p class="hint">같은 유약 색으로 놓고 닮은 정도를 비교해보세요</p>`;
+      <text x="80" y="230" text-anchor="middle" font-size="14" font-weight="800" fill="${K}" font-family="'Helvetica Neue LT', sans-serif">장독대</text><text x="260" y="230" text-anchor="middle" font-size="14" font-weight="800" fill="${K}" font-family="'Helvetica Neue LT', sans-serif">텀블러</text></svg><p class="hint">같은 유약 색으로 놓고 닮은 정도를 비교해보세요</p>`;
     const sc = $('#sc', st); paint();
     bar.innerHTML = rowOf('유약 색', GL.map((t, i) => `<button class="chip${i ? '' : ' on'}" data-g="${i}">${t[0]}</button>`).join('')) + rowOf('보기', '<button class="chip" data-a="open">뚜껑 열기</button><button class="chip" data-a="cmp">겹쳐보기</button>'); colBar(bar);
     bar.onclick = e => {
@@ -349,7 +346,6 @@ const X = {
     };
   },
 
-  /* 어그 메리제인슈즈: 색상 + 장식 */
   shoe(st, bar) {
     const CO = ['#D8B58A', '#6B4A33', '#1C1C20', '#F7C4E4'], DE = ['bow', 'star', 'flower', 'heart'], SL = [[24, 24], [14, 29], [32, 27]]; let col = 0, ch = [];
     st.innerHTML = '<svg id="sc" class="scene" viewBox="0 0 360 260"></svg><p class="hint">색을 고르고 장식을 달아보세요 (최대 3개)</p>';
@@ -374,15 +370,15 @@ function home() {
   app.innerHTML = `<section class="view space"><div class="stars"></div><div class="stars b"></div>
         ${Object.keys(CATS).map(k => `<button class="orb ${k}" data-k="${k}" aria-label="${CATS[k].n}"><span class="em">${ic(CATS[k].i)}</span><span class="lb">${CATS[k].n}</span></button>`).join('')}
     <div class="ripple"></div>
-    <svg class="cursor" viewBox="0 0 24 24"><path d="M5 2l14 11-6.5 1.2L9.8 21z" fill="#FEFEFE" stroke="#1C1C20" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    <svg class="cursor" viewBox="0 0 24 24"><path d="M5 2l14 11-6.5 1.2L9.8 21z" fill="#FEFEFE" stroke="#000000" stroke-width="1.5" stroke-linejoin="round"/></svg>
     <div class="tip">행성을 클릭해보세요</div></section>`;
-  const sp = $('.space'); $$('.orb', sp).forEach(o => o.onclick = () => location.hash = '#/cat/' + o.dataset.k);
+  const sp = $('.space');$$('.orb', sp).forEach(o => o.onclick = () => location.hash = '#/cat/' + o.dataset.k);
   space3d(sp);
   tutorial(sp);
 }
 
 async function tutorial(sp) {
-  const cur = $('.cursor', sp), rp = $('.ripple', sp), tip = $('.tip', sp), orbs = $$('.orb', sp); let stop = false, i = 0;
+  const cur = $('.cursor', sp), rp =$('.ripple', sp), tip = $('.tip', sp), orbs =$$('.orb', sp); let stop = false, i = 0;
   orbs.forEach(o => o.addEventListener('pointerenter', () => { stop = true; cur.remove(); rp.remove(); tip.classList.add('off'); }));
   await sleep(900);
   while (!stop && sp.isConnected) {
@@ -424,16 +420,14 @@ function route() {
   const [a, k, i] = location.hash.replace('#/', '').split('/');
   const cat = a === 'cat' || a === 't' ? (CATS[k] ? k : null) : null;
   document.body.className = cat ? '' : 'home'; document.body.dataset.c = cat || '';
-  nav.innerHTML = Object.keys(CATS).map(c => `<a href="#/cat/${c}" class="${c === cat ? 'on' : ''}" style="${c === cat ? '' : ''}">${CATS[c].n}</a>`).join('');
+  nav.innerHTML = Object.keys(CATS).map(c => `<a href="#/cat/${c}" class="${c === cat ? 'on' : ''}">${CATS[c].n}</a>`).join('');
   scrollTo(0, 0);
   if (!cat) home(); else if (a === 'cat') category(k); else trend(k, +i || 0);
 }
 addEventListener('hashchange', route);
 route();
 
-/* ---------------- 메인 3D (Three.js r128) ----------------
-   먹거리=고리 두른 라면 그릇 / 놀거리=고리 두른 게임 컨트롤러 / 패션=고리 두른 쇼핑백
-   각 3D 오브젝트 위에 투명한 .orb 버튼을 겹쳐 클릭·키보드·튜토리얼을 그대로 사용 */
+/* ---------------- 메인 3D (Three.js r128) Preserved ---------------- */
 function space3d(sp) {
   if (typeof THREE === 'undefined') return;
   let R; try { R = new THREE.WebGLRenderer({ antialias: true, alpha: true }); } catch (e) { return; }
@@ -451,20 +445,20 @@ function space3d(sp) {
     add(g, new THREE.LatheGeometry([[0, -.7], [.55, -.7], [.9, -.45], [1.25, .35], [1.32, .5], [1.2, .5], [.85, -.3], [0, -.35]].map(p => new THREE.Vector2(...p)), 48),
       new THREE.MeshStandardMaterial({ color: 0xFFEA00, roughness: .35, side: THREE.DoubleSide }));
     add(g, new THREE.CircleGeometry(1.1, 40), 0xE8472B, [0, .3, 0]).rotation.x = -Math.PI / 2;
-    add(g, new THREE.TorusGeometry(.45, .09,10, 30), 0xFFD27A, [.25, .34, -.1]).rotation.x = Math.PI / 2;
+    add(g, new THREE.TorusGeometry(.45, .09, 10, 30), 0xFFD27A, [.25, .34, -.1]).rotation.x = Math.PI / 2;
     add(g, S(.3), 0xFEFEFE, [-.4, .4, .2], [1, .7, 1]); add(g, S(.14), 0xFFB300, [-.4, .55, .2]);
     add(g, S(.25), 0x4CAF50, [.55, .42, .5], [1, .6, 1]);
-    [.3, .6].forEach(z => add(g, new THREE.CylinderGeometry(.04, .04, 2.9, 8), 0x1C1C20, [0, .62, z]).rotation.z = Math.PI / 2);
+    [.3, .6].forEach(z => add(g, new THREE.CylinderGeometry(.04, .04, 2.9, 8), 0x000000, [0, .62, z]).rotation.z = Math.PI / 2);
   };
   const play = g => {
     add(g, S(1), 0x1C94F5, [0, 0, 0], [1.55, .7, .95]);
     [-1, 1].forEach(s => add(g, S(.55), 0x1C94F5, [s * 1.05, -.5, 0], [.8, 1.25, .9]));
-    add(g, B(.55, .12, .16), 0x1C1C20, [-.7, .62, .05]); add(g, B(.16, .12, .55), 0x1C1C20, [-.7, .62, .05]);
-    [[.2, 0, 0xF65AC2], [-.2, 0, 0xFFEA00], [0, .2, 0xFEFEFE], [0, -.2, 0x1C1C20]].forEach(([x, z, c]) => add(g, S(.12), c, [.75 + x, .6, .05 + z]));
+    add(g, B(.55, .12, .16), 0x000000, [-.7, .62, .05]); add(g, B(.16, .12, .55), 0x000000, [-.7, .62, .05]);
+    [[.2, 0, 0xF65AC2], [-.2, 0, 0xFFEA00], [0, .2, 0xFEFEFE], [0, -.2, 0x000000]].forEach(([x, z, c]) => add(g, S(.12), c, [.75 + x, .6, .05 + z]));
   };
   const fashion = g => {
     add(g, B(1.5, 1.7, .7), 0xF65AC2, [0, -.1, 0]); add(g, B(1.52, .2, .72), 0xFEFEFE, [0, .25, 0]);
-    add(g, new THREE.TorusGeometry(.45, .07, 12, 40, Math.PI), 0x1C1C20, [0, .75, 0]);
+    add(g, new THREE.TorusGeometry(.45, .07, 12, 40, Math.PI), 0x000000, [0, .75, 0]);
     add(g, B(.7, .4, .02), 0xFFEA00, [0, -.45, .37]); add(g, S(.15), 0x1C94F5, [.55, .55, .45]);
   };
   const objs = [['food', food, 0xFFF47A, .45], ['play', play, 0x7CC6FB, .9], ['fashion', fashion, 0xFBA0DE, .12]].map(([k, fn, rc, tx], i) => {
