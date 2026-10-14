@@ -59,9 +59,9 @@ const CATS = {
 };
 
 const BLOB = {
-  food: '<svg viewBox="0 0 200 200" preserveAspectRatio="none"><path d="M38 38C62 8 128 2 166 30c30 22 36 62 22 96-14 34-52 62-96 62C40 188 8 156 8 112 8 78 22 52 38 38z"/></svg>',
-  play: '<svg viewBox="0 0 200 200" preserveAspectRatio="none"><path d="M24 82C14 46 52 14 96 14c32 0 50 18 76 34 28 18 34 52 20 82-14 30-30 38-58 52-30 14-60 14-84-8C26 150 34 116 24 82z"/></svg>',
-  fashion: '<svg viewBox="0 0 200 200" preserveAspectRatio="none"><path d="M96 6c34-4 60 22 80 46 22 26 22 62 6 92-16 30-44 48-82 48-36 0-72-18-84-56-10-32 4-52 12-76C36 36 62 10 96 6z"/></svg>',
+  food: '<svg viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M38 6C52 1 66 0 82 0C94 1 100 8 100 16C100 28 98 40 91 52C83 64 72 70 58 87C52 94 46 99 38 100C30 100 27 92 27 85C26 76 22 70 18 65C10 56 0 45 0 35C0 26 6 20 14 16C22 12 30 8 38 6z"/></svg>',
+  play: '<svg viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M41 2C32 5 24 7 18 12C10 18 5 28 4 41C3 54 8 62 5 74C2 82 -1 90 4 97C10 101 20 100 28 98C42 96 56 96 68 90C82 83 91 75 96 62C101 52 100 42 94 33C88 25 80 21 72 16C64 11 62 6 54 3C50 0 46 0 41 2z"/></svg>',
+  fashion: '<svg viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M55 0C68 2 80 8 88 20C96 30 100 40 99 55C98 70 88 82 78 90C68 98 54 100 40 99C26 98 12 92 6 78C-1 68 -1 52 4 40C10 26 20 16 32 8C40 3 46 0 55 0z"/></svg>',
 };
 const LAB = { food: 'FOOD', play: 'PLAY', fashion: 'FASHION' };
 
@@ -492,11 +492,9 @@ async function tutorial(sp) {
 }
 
 function category(k) {
-  const C = CATS[k];
-  const card = (t, i, cls) => `<a class="c2 ${cls}${t.img ? ' has-img' : ''}" href="#/t/${k}/${i}"><div class="ph"${t.img ? ` style="background-image:url(${t.img})"` : ''}></div><div class="ct"><h3>${t.t}</h3><p>${t.lead.split('.')[0]}.</p><span class="view-more">VIEW MORE →</span></div></a>`;
-  const ts = T[k];
-  app.innerHTML = `<section class="view cat2"><div class="cat2-head"><span class="tagp ${k}">${LAB[k]}</span><h2>${C.n}</h2><p>${C.d}</p></div>
-    <div class="mosaic">${card(ts[0], 0, 'm-l')}<div class="rg">${ts.slice(1).map((t, i) => card(t, i + 1, 'm-r')).join('')}</div></div></section>`;
+  const C = CATS[k], ts = T[k], pos = ['m1', 'm2', 'm3', 'm4'];
+  const card = (t, i) => `<a class="c2 ${pos[i] || 'm5'}${t.img ? ' has-img' : ''}" href="#/t/${k}/${i}"><div class="ph"${t.img ? ` style="background-image:url(${t.img})"` : ''}></div><div class="ct"><h3>${t.t}</h3><p>${t.lead.split('.')[0]}.</p><span class="view-more">VIEW MORE →</span></div></a>`;
+  app.innerHTML = `<section class="view cat3"><div class="cat3-head"><span class="tagp ${k}">${LAB[k]}</span><h2>${C.n}</h2><p>${C.d}</p></div><div class="mo">${ts.map(card).join('')}</div></section>`;
 }
 
 function trend(k, i) {
@@ -504,7 +502,6 @@ function trend(k, i) {
   app.innerHTML = `<section class="view tpage"><div class="tw"><a class="back" href="#/cat/${k}">← ${CATS[k].n} 목록</a>
     <h1>${t.t}</h1><p class="lead">${t.lead}</p>${t.body.map(p => `<p class="tx">${p}</p>`).join('')}
     <div class="stage-wrap"><div class="stage" id="st"></div><div class="stage-bar" id="bar"></div></div>
-    <div class="box y"><b>함께 이야기해봐요</b>${t.talk}</div>
     <div class="pager"><a href="#/t/${k}/${(i + list.length - 1) % list.length}">← ${prev.t}</a><a href="#/t/${k}/${(i + 1) % list.length}">${next.t} →</a></div></div></section>`;
   X[t.type]($('#st'), $('#bar'), t);
 }
@@ -538,7 +535,7 @@ function space3d(sp) {
   };
   const food = g => {
     add(g, new THREE.LatheGeometry([[0, -.7], [.55, -.7], [.9, -.45], [1.25, .35], [1.32, .5], [1.2, .5], [.85, -.3], [0, -.35]].map(p => new THREE.Vector2(...p)), 48),
-      new THREE.MeshStandardMaterial({ color: 0xFEFEFE, roughness: .35, side: THREE.DoubleSide }));
+      new THREE.MeshStandardMaterial({ color: 0xFFEA00, roughness: .35, side: THREE.DoubleSide }));
     add(g, new THREE.CircleGeometry(1.1, 40), 0xE8472B, [0, .3, 0]).rotation.x = -Math.PI / 2;
     add(g, new THREE.TorusGeometry(.45, .09, 10, 30), 0xFFD27A, [.25, .34, -.1]).rotation.x = Math.PI / 2;
     add(g, S(.3), 0xFEFEFE, [-.4, .4, .2], [1, .7, 1]); add(g, S(.14), 0xFFB300, [-.4, .55, .2]);
@@ -546,16 +543,16 @@ function space3d(sp) {
     [.3, .6].forEach(z => add(g, new THREE.CylinderGeometry(.04, .04, 2.9, 8), 0x1C1C20, [0, .62, z]).rotation.z = Math.PI / 2);
   };
   const play = g => {
-    add(g, S(1), 0x1C1C20, [0, 0, 0], [1.45, .45, .85]);
-    [-1, 1].forEach(s => add(g, S(1), 0x1C1C20, [s * 1.0, -.02, .62], [.5, .42, .95]));
+    add(g, S(1), 0x1C94F5, [0, 0, 0], [1.45, .45, .85]);
+    [-1, 1].forEach(s => add(g, S(1), 0x1C94F5, [s * 1.0, -.02, .62], [.5, .42, .95]));
     add(g, B(.55, .1, .17), 0xFEFEFE, [-.75, .43, -.1]); add(g, B(.17, .1, .55), 0xFEFEFE, [-.75, .43, -.1]);
     [[.2, 0, 0xF65AC2], [-.2, 0, 0xFFEA00], [0, .2, 0x7BE0B0], [0, -.2, 0xFEFEFE]].forEach(([x, z, c]) => add(g, S(.12), c, [.75 + x, .43, -.1 + z]));
-    [-.4, .4].forEach(x => add(g, new THREE.CylinderGeometry(.17, .2, .14, 20), 0x4B4F59, [x, .43, .35]));
+    [-.4, .4].forEach(x => add(g, new THREE.CylinderGeometry(.17, .2, .14, 20), 0x1C1C20, [x, .43, .35]));
   };
   const fashion = g => {
-    add(g, new THREE.SphereGeometry(1.1, 32, 20, 0, Math.PI * 2, 0, Math.PI / 2), new THREE.MeshStandardMaterial({ color: 0xFEFEFE, roughness: .5, side: THREE.DoubleSide }), [0, 0, 0], [1, .9, 1]);
-    add(g, new THREE.CylinderGeometry(1.2, 1.2, .1, 32, 1, false, -Math.PI / 2, Math.PI), 0xE1E5EA, [0, -.02, .05], [1, 1, 1.45]);
-    add(g, S(.12), 0x1C1C20, [0, .98, 0]);
+    add(g, new THREE.SphereGeometry(1.1, 32, 20, 0, Math.PI * 2, 0, Math.PI / 2), new THREE.MeshStandardMaterial({ color: 0xF65AC2, roughness: .5, side: THREE.DoubleSide }), [0, 0, 0], [1, .9, 1]);
+    add(g, new THREE.CylinderGeometry(1.2, 1.2, .1, 32, 1, false, -Math.PI / 2, Math.PI), 0xE04AAE, [0, -.02, .05], [1, 1, 1.45]);
+    add(g, S(.12), 0xFEFEFE, [0, .98, 0]);
     [-1, 1].forEach(s => { add(g, S(1), 0xFEFEFE, [s * .65, -.95, 1.0], [.55, .4, .1]); add(g, S(1), 0x1C1C20, [s * .65, -.95, 1.07], [.46, .32, .06]); });
     add(g, B(.3, .07, .07), 0xFEFEFE, [0, -.88, 1.0]);
   };
