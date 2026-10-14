@@ -54,6 +54,11 @@ const CATS = {
   fashion: { n: '패션', i: 'bag', d: '입는 것을 넘어 꾸미고 고르는 즐거움. 내 취향대로 조합해보세요.' },
 };
 
+const BLOB = {
+  food: '<svg viewBox="0 0 200 200" preserveAspectRatio="none"><path d="M38 38C62 8 128 2 166 30c30 22 36 62 22 96-14 34-52 62-96 62C40 188 8 156 8 112 8 78 22 52 38 38z"/></svg>',
+  play: '<svg viewBox="0 0 200 200" preserveAspectRatio="none"><path d="M24 82C14 46 52 14 96 14c32 0 50 18 76 34 28 18 34 52 20 82-14 30-30 38-58 52-30 14-60 14-84-8C26 150 34 116 24 82z"/></svg>',
+  fashion: '<svg viewBox="0 0 200 200" preserveAspectRatio="none"><path d="M96 6c34-4 60 22 80 46 22 26 22 62 6 92-16 30-44 48-82 48-36 0-72-18-84-56-10-32 4-52 12-76C36 36 62 10 96 6z"/></svg>',
+};
 const LAB = { food: 'FOOD', play: 'PLAY', fashion: 'FASHION' };
 
 /* ---------------- 트렌드 데이터 ---------------- */
@@ -375,13 +380,13 @@ $('.logo').innerHTML = LOGO;
 
 function home() {
   const ks = Object.keys(CATS);
-  app.innerHTML = `<section class="view space">${ks.map(k => `<a class="hb ${k}" href="#/cat/${k}" aria-label="${CATS[k].n}"><div class="shape"></div><div class="txt"><span class="tagp ${k}">${LAB[k]}</span><h2>${CATS[k].n}</h2><p>${CATS[k].d}</p><span class="view-more">VIEW →</span></div></a>`).join('')}
+  app.innerHTML = `<section class="view space">${ks.map(k => `<a class="hb ${k}" href="#/cat/${k}" aria-label="${CATS[k].n}"><div class="shape">${BLOB[k]}</div><div class="txt"><span class="tagp ${k}">${LAB[k]}</span><h2>${CATS[k].n}</h2><p>${CATS[k].d}</p><span class="view-more">VIEW →</span></div></a>`).join('')}
     <div class="ripple"></div>
     <svg class="cursor" viewBox="0 0 24 24"><path d="M5 2l14 11-6.5 1.2L9.8 21z" fill="#FEFEFE" stroke="#1C1C20" stroke-width="1.5" stroke-linejoin="round"/></svg>
     <div class="tip">오브젝트를 클릭해보세요</div></section>`;
   const sp = $('.space');
   space3d(sp);
-  if (!$('.gl', sp)) $$('.shape', sp).forEach((s, i) => s.innerHTML = ic(CATS[ks[i]].i));
+  if (!$('.gl', sp)) $$('.shape', sp).forEach((s, i) => s.insertAdjacentHTML('beforeend', ic(CATS[ks[i]].i)));
   tutorial(sp);
 }
 
@@ -497,7 +502,7 @@ function space3d(sp) {
     objs.forEach((o, i) => {
       const r = o.sh.getBoundingClientRect();   // 도형 중심 → 3D 좌표
       const cx = r.left - sr.left + r.width / 2, cy = r.top - sr.top + r.height / 2;
-      o.s = Math.min(r.width, r.height) * .78 / (3.3 * pu);
+      o.s = Math.min(r.width, r.height) * .95 / (3.3 * pu);
       o.h += ((hov === i ? 1 : 0) - o.h) * .12; o.p *= .9; o.yaw += d * o.h * 3;
       o.root.scale.setScalar(o.s * (1 + .12 * o.h - .14 * o.p));
       o.root.position.set((cx - W / 2) / pu, -(cy - H / 2) / pu + Math.sin(t / 900 + i * 2) * .1, 0);
