@@ -1,80 +1,20 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>A2Z - 전세대를 위한 인터랙티브 트렌드 스페이스</title>
-  <!-- SUIT 폰트 -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-api/SUIT/fonts/variable/woff2/SUIT-Variable.css">
-  <!-- CSS 연결 (상대경로 지정) -->
-  <link rel="stylesheet" href="./styles.css">
-  <!-- Three.js (3D 메인 화면용) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A2Z · 모든 세대의 트렌드 놀이터</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <!-- 헤더 영역 -->
-  <header id="app-header">
-    <div class="header-container">
-      <!-- 로고 (한글 제거 완료) -->
-      <div class="logo" id="logo-btn">A2Z</div>
-      
-      <!-- 오른쪽 상단 탭 (메인화면 진입 시 숨김 처리) -->
-      <nav class="nav-tabs hidden" id="nav-tabs">
-        <button class="tab-btn" data-category="FOOD">먹거리</button>
-        <button class="tab-btn" data-category="PLAY">놀거리</button>
-        <button class="tab-btn" data-category="FASHION">패션</button>
-      </nav>
-    </div>
-  </header>
-
-  <!-- 메인 화면 (3D 공간 그래픽) -->
-  <section id="main-screen" class="screen active">
-    <div id="canvas-container"></div>
-    <div class="main-overlay">
-      <div class="hero-badge">A2Z TREND SPACE</div>
-      <h1 class="main-title">전 세대가 함께 교감하는 인터랙션 트렌드</h1>
-      <p class="main-subtext">공간 속 오브젝트를 터치하여 세대를 잇는 즐거운 유행 속으로 들어가보세요.</p>
-      <div class="guide-chip">3D 오브젝트를 클릭하면 해당 카테고리로 이동합니다</div>
-    </div>
-  </section>
-
-  <!-- 카테고리 상세 화면 -->
-  <section id="category-screen" class="screen">
-    <div class="category-container">
-      <div class="category-header">
-        <h2 id="category-title">카테고리</h2>
-        <p id="category-desc">트렌드 설명</p>
-      </div>
-      <!-- 트렌드 카드 그리드 (호버 시 모양 변형 없음) -->
-      <div id="trend-cards-grid" class="cards-grid"></div>
-    </div>
-  </section>
-
-  <!-- 인터랙션 / 트렌드 상세 화면 (세로 레이아웃) -->
-  <section id="detail-screen" class="screen">
-    <div class="detail-container vertical-layout">
-      <button class="back-btn" id="back-to-cat-btn">← 목록으로 돌아가기</button>
-      
-      <!-- 상단: 트렌드 제목 및 상세 설명 -->
-      <div class="detail-info-block">
-        <span class="detail-badge" id="detail-badge">CATEGORY</span>
-        <h2 class="detail-title" id="detail-title">트렌드 이름</h2>
-        <div class="detail-description" id="detail-description"></div>
-      </div>
-
-      <!-- 하단: 체험 인터랙션 공간 -->
-      <div class="detail-interactive-area">
-        <div class="interactive-header">
-          <span class="interactive-title">DIRECT EXPERIENCE INTERACTION</span>
-          <span class="interactive-hint">화면 속 오브젝트를 직접 눌러보고 체험해 보세요!</span>
-        </div>
-        <div id="interactive-container" class="interactive-stage"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- JS 연결 (상대경로 지정) -->
-  <script src="./script.js"></script>
+<header id="top">
+  <!-- 5. 로고 한글(에이투지) 제거 및 A2Z 표기 -->
+  <a href="#/" class="logo" aria-label="A2Z"></a>
+  <nav id="nav"></nav>
+</header>
+<main id="app"></main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
