@@ -1,19 +1,83 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>A2Z · 모든 세대의 트렌드 놀이터</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A2Z - 전세대를 위한 인터랙티브 트렌드 스페이스</title>
+  <!-- SUIT 폰트 불러오기 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-api/SUIT/fonts/variable/woff2/SUIT-Variable.css">
+  <!-- CSS 연결 -->
+  <link rel="stylesheet" href="styles.css">
+  <!-- Three.js (3D 메인 화면용 라이브러리) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
-<header id="top">
-  <a href="#/" class="logo" aria-label="A2Z 홈"></a>
-  <nav id="nav"></nav>
-</header>
-<main id="app"></main>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="script.js"></script>
+
+  <!-- 헤더 영역 -->
+  <header id="app-header">
+    <div class="header-container">
+      <!-- 5. 로고 한글 '에이투지' 제거 완료 -->
+      <div class="logo" id="logo-btn">A2Z</div>
+      
+      <!-- 3. 메인화면에서는 숨겨지고, 카테고리/상세화면에서만 노출되는 탭 목록 -->
+      <nav class="nav-tabs" id="nav-tabs">
+        <button class="tab-btn" data-category="FOOD">먹거리</button>
+        <button class="tab-btn" data-category="PLAY">놀거리</button>
+        <button class="tab-btn" data-category="FASHION">패션</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 메인 화면 (3D 공간 그래픽) -->
+  <section id="main-screen" class="screen active">
+    <!-- 6. 순백색을 탈피한 공간 분위기 연출용 배경 캔버스 및 안내 레이어 -->
+    <div id="canvas-container"></div>
+    <div class="main-overlay">
+      <div class="hero-badge">A2Z TREND SPACE</div>
+      <h1 class="main-title">전 세대가 함께 교감하는 인터랙션 트렌드</h1>
+      <p class="main-subtext">공간 속 오브젝트를 터치하여 세대를 잇는 즐거운 유행 속으로 들어가보세요.</p>
+      <div class="guide-chip">3D 오브젝트를 클릭하면 해당 카테고리로 이동합니다</div>
+    </div>
+  </section>
+
+  <!-- 카테고리 상세 화면 -->
+  <section id="category-screen" class="screen">
+    <div class="category-container">
+      <div class="category-header">
+        <h2 id="category-title">카테고리</h2>
+        <p id="category-desc">트렌드 설명</p>
+      </div>
+      <!-- 2. 카드 호버 시 외각선 형태 변형이 없도록 고정된 리스트 레이아웃 -->
+      <div id="trend-cards-grid" class="cards-grid"></div>
+    </div>
+  </section>
+
+  <!-- 인터랙션 / 트렌드 상세 화면 (4. 세로 화면 구성) -->
+  <section id="detail-screen" class="screen">
+    <div class="detail-container vertical-layout">
+      <button class="back-btn" id="back-to-cat-btn">← 목록으로 돌아가기</button>
+      
+      <!-- 상단: 트렌드 제목 및 상세 설명 (세대한계 완화 및 세로 정렬) -->
+      <div class="detail-info-block">
+        <span class="detail-badge" id="detail-badge">CATEGORY</span>
+        <h2 class="detail-title" id="detail-title">트렌드 이름</h2>
+        <div class="detail-description" id="detail-description">
+          <!-- 상세 설명 텍스트가 삽입됩니다 -->
+        </div>
+      </div>
+
+      <!-- 하단: 고품질 체험 인터랙션 공간 (7. 인터랙션 디테일 업그레이드) -->
+      <div class="detail-interactive-area">
+        <div class="interactive-header">
+          <span class="interactive-title">DIRECT EXPERIENCE INTERACTION</span>
+          <span class="interactive-hint">화면 속 오브젝트를 직접 눌러보고 체험해 보세요!</span>
+        </div>
+        <div id="interactive-container" class="interactive-stage"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JS 연결 -->
+  <script src="script.js"></script>
 </body>
 </html>
