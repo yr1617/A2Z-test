@@ -231,4 +231,204 @@ const X = {
       const it = c.shops[sh].items[+b.dataset.i];
       if (spent() + it[2] <= c.budget) { basket.push({ n: it[1], p: it[2] }); keyClickSound(); render(); }
     };
-    bar.innerHTML
+    bar.innerHTML = rowOf('가게 이동', c.shops.map((s, i) => `<button class="chip${i === sh ? ' on' : ''}" data-s="${i}">${s.n}</button>`).join(''));
+    bar.onclick = e => { const b = e.target.closest('.chip'); if (b && b.dataset.s) { sh = +b.dataset.s; render(); } };
+    render();
+  },
+
+  dish(st, bar, c) {
+    st.innerHTML = `<div class="plate" id="pl" style="--b:${c.base}"><i class="base"></i></div><div class="count" id="ct">맛있게 한입씩 먹어보세요</div>`;
+    const pl = $('#pl', st);
+    c.items.forEach(it => {
+      const el = piece(I[it[1]](it[2]), it[3]);
+      el.style.left = 30 + Math.random() * 40 + '%'; el.style.top = 30 + Math.random() * 40 + '%';
+      pl.appendChild(el);
+    });
+  },
+
+  pizza(st, bar) {
+    let bites = Array(8).fill(0);
+    st.innerHTML = '<svg class="pz" viewBox="0 0 200 200"></svg><div class="count" id="ct">조각을 눌러 한입씩 맛보세요</div>';
+    const render = () => {
+      let h = ''; const rad = Math.PI / 4;
+      for (let i = 0; i < 8; i++) {
+        const a0 = i * rad, a1 = a0 + rad, x0 = 100 + 80 * Math.cos(a0), y0 = 100 + 80 * Math.sin(a0), x1 = 100 + 80 * Math.cos(a1), y1 = 100 + 80 * Math.sin(a1);
+        if (bites[i] < 3) h += `<path class="sl" data-i="${i}" d="M100 100L${x0} ${y0}A80 80 0 0 1 ${x1} ${y1}Z" fill="#FFD84D" stroke="${K}" stroke-width="2"/>`;
+      }
+      $('.pz', st).innerHTML = h;
+    };
+    st.onclick = e => { const s = e.target.closest('.sl'); if (s) { bites[+s.dataset.i]++; crunchSound(); render(); } };
+    render();
+  },
+
+  ramen(st, bar) {
+    let step = 0;
+    const go = () => {
+      if (step === 0) st.innerHTML = `<div class="say">라면을 맛있게 끓여요</div><button class="bigbtn" id="a">면 건져서 접시에 말리기</button>`;
+      else st.innerHTML = `<div class="plate"><svg class="ic" viewBox="0 0 48 48">${I.noodle()}</svg></div><div class="say">면발이 꼬들하게 말랐어요! 한입 누르세요</div>`;
+      if ($('#a', st)) $('#a', st).onclick = () => { step = 1; go(); };
+    };
+    go();
+  },
+
+  jade(st, bar) {
+    let on = true;
+    st.innerHTML = `<svg class="scene" viewBox="0 0 200 200"><circle cx="100" cy="80" r="30" fill="#F2CDB5"/><rect x="70" y="110" width="60" height="80" fill="${K}"/>${on ? '<circle cx="100" cy="120" r="12" fill="#7BE0B0"/>' : ''}</svg><div class="say">옥 목걸이 착용하기</div>`;
+    bar.innerHTML = '<button class="chip" id="t">착용 / 해제</button>';
+    $('#t', bar).onclick = () => { on = !on; X.jade(st, bar); keyClickSound(); };
+  },
+
+  decor(st, bar, c) {
+    st.innerHTML = `<svg class="scene" viewBox="0 0 200 200"><rect x="60" y="40" width="80" height="120" rx="10" fill="#9CCBF5"/></svg><div class="say">메지루시 걸기</div>`;
+  },
+
+  /* [요구사항 9] 하단 파츠 트레이에서 잡아서 끌어 놓는 드래그 앤 드롭 구현 */
+  decor_tray(st, bar, c) {
+    const isShoe = c.type_kind === 'shoe';
+    st.innerHTML = `
+      <div class="decor-wrap">
+        <svg id="sc" class="scene dgs" viewBox="0 0 300 200">
+          ${isShoe ? `<path d="M40 140C40 90 80 70 150 70C220 70 260 90 260 140Z" fill="#F65AC2" opacity=".8"/><rect x="40" y="140" width="220" height="20" rx="6" fill="${K}"/>` : `<rect x="50" y="85" width="200" height="30" rx="15" fill="#1C94F5"/><path d="M50 85L20 100L50 115Z" fill="${K}"/>`}
+        </svg>
+        <div class="parts-tray">
+          ${c.parts.map(p => `<div class="tray-part" data-k="${p}">${ic(p)}</div>`).join('')}
+        </div>
+      </div>
+      <p class="hint">하단 트레이의 파츠를 마우스로 끌어서 원하는 위치에 놓아보세요</p>
+    `;
+    const svg = $('#sc', st); let dragPart = null, activeEl = null;      $$('.tray-part', st).forEach(p => {
+      p.onpointerdown = e => {
+        dragPart = p.dataset.k;
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.className.baseVal = 'dg';
+        g.innerHTML = `<g transform="translate(-20 -20) scale(0.8)">${I[dragPart]()}</g>`;
+        svg.appendChild(g);
+        activeEl = g;
+        keyClickSound();
+      };
+    });
+
+    st.onpointermove = e => {
+      if (!activeEl) return;
+      const r = svg.getBoundingClientRect();
+      const x = e.clientX - r.left, y = e.clientY - r.top;
+      activeEl.setAttribute('transform', `translate(${x} ${y})`);
+    };
+
+    st.onpointerup = () => { dragPart = null; activeEl = null; };
+  }
+};
+
+/* ---------------- 화면 라우팅 ---------------- */
+const app = $('#app'), nav = $('#nav');
+$('.logo').innerHTML = LOGO;
+
+function home() {
+  const ks = Object.keys(CATS);
+  app.innerHTML = `<section class="view space">${ks.map(k => `
+    <a class="hb ${k}" href="#/cat/${k}" aria-label="${CATS[k].n}">
+      <div class="shape">${BLOB[k]}</div>
+      <div class="txt">
+        <span class="tagp ${k}">${LAB[k]}</span>
+        <h2>${CATS[k].n}</h2>
+        <p>${CATS[k].d}</p>
+        <span class="view-main">VIEW →</span>
+      </div>
+    </a>`).join('')}
+    <div class="tip">오브젝트를 선택해 이야기를 시작해보세요</div>
+  </section>`;
+  space3d($('.space'));
+}
+
+function category(k) {
+  const C = CATS[k];
+  app.innerHTML = `<section class="view cat2">
+    <div class="cat2-head"><span class="tagp ${k}">${LAB[k]}</span><h2>${C.n}</h2><p>${C.d}</p></div>
+    <div class="mosaic">${T[k].map((t, i) => `
+      <a class="c2" href="#/t/${k}/${i}">
+        <div class="ph"></div>
+        <div class="ct">
+          <h3>${t.t}</h3>
+          <p>${t.lead}</p>
+          <span class="view-more">VIEW MORE →</span>
+        </div>
+      </a>`).join('')}
+    </div>
+  </section>`;
+}
+
+/* [요구사항 4] 세로형 깔끔한 상세 레이아웃 구조 */
+function trend(k, i) {
+  const list = T[k], t = list[i], prev = list[(i + list.length - 1) % list.length], next = list[(i + 1) % list.length];
+  app.innerHTML = `<section class="view tpage">
+    <div class="tw">
+      <a class="back" href="#/cat/${k}">← ${CATS[k].n} 목록으로 돌아가기</a>
+      <h1>${t.t}</h1>
+      <p class="lead">${t.lead}</p>
+      ${t.body.map(p => `<p class="tx">${p}</p>`).join('')}
+      <div class="stage-wrap">
+        <div class="stage" id="st"></div>
+        <div class="stage-bar" id="bar"></div>
+      </div>
+      <div class="pager">
+        <a href="#/t/${k}/${(i + list.length - 1) % list.length}">← ${prev.t}</a>
+        <a href="#/t/${k}/${(i + 1) % list.length}">${next.t} →</a>
+      </div>
+    </div>
+  </section>`;
+  X[t.type]($('#st'), $('#bar'), t);
+}
+
+function route() {
+  const [a, k, i] = location.hash.replace('#/', '').split('/');
+  const cat = a === 'cat' || a === 't' ? (CATS[k] ? k : null) : null;
+  document.body.className = cat ? '' : 'home';
+  document.body.dataset.c = cat || '';
+  nav.innerHTML = Object.keys(CATS).map(c => `<a href="#/cat/${c}" class="${c === cat ? 'on' : ''}">${CATS[c].n}</a>`).join('');
+  scrollTo(0, 0);
+  if (!cat) home(); else if (a === 'cat') category(k); else trend(k, +i || 0);
+}
+addEventListener('hashchange', route);
+route();
+
+/* ---------------- [요구사항 1, 12] 3D 오브젝트 크기 확대 및 부드러운 천천히 회전 ---------------- */
+function space3d(sp) {
+  if (typeof THREE === 'undefined') return;
+  let R; try { R = new THREE.WebGLRenderer({ antialias: true, alpha: true }); } catch (e) { return; }
+  R.setPixelRatio(Math.min(devicePixelRatio, 2)); R.outputEncoding = THREE.sRGBEncoding;
+  const cv = R.domElement; cv.className = 'gl'; sp.appendChild(cv);
+  const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(45, 1, .1, 100); cam.position.z = 10;
+  scene.add(new THREE.AmbientLight(0xffffff, .9));
+  const dl = new THREE.DirectionalLight(0xffffff, .8); dl.position.set(3, 5, 6); scene.add(dl);
+
+  const S = r => new THREE.SphereGeometry(r, 32, 24);
+  const add = (g, geo, col) => g.add(new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: col, roughness: .35 })));
+
+  const objs = [['food', g => add(g, S(1.2), 0xFFEA00)], ['play', g => add(g, S(1.2), 0x1C94F5)], ['fashion', g => add(g, S(1.2), 0xF65AC2)]].map(([k, fn]) => {
+    const root = new THREE.Group(), spin = new THREE.Group();
+    fn(spin); root.add(spin); scene.add(root);
+    return { root, spin, b: $(`.hb.${k}`, sp), sh: $(`.hb.${k} .shape`, sp), yaw: 0 };
+  });
+
+  let pu = sp.clientHeight / 8.284;
+  const size = () => { const W = sp.clientWidth, H = sp.clientHeight; R.setSize(W, H, false); cam.aspect = W / H; cam.updateProjectionMatrix(); pu = H / 8.284; };
+  size();
+
+  let t0 = performance.now();
+  const tick = t => {
+    if (!sp.isConnected) return;
+    const d = Math.min((t - t0) / 1000, .05); t0 = t;
+    const sr = sp.getBoundingClientRect();
+    objs.forEach((o, i) => {
+      const r = o.sh.getBoundingClientRect();
+      const cx = r.left - sr.left + r.width / 2, cy = r.top - sr.top + r.height / 2;
+      /* [요구사항 1] 3D 크기 크게 확대 (스케일 2.0배 적용) */
+      o.root.scale.setScalar((Math.min(r.width, r.height) * 2.0) / (3.3 * pu));
+      o.root.position.set((cx - sp.clientWidth / 2) / pu, -(cy - sp.clientHeight / 2) / pu, 0);
+      /* [요구사항 12] 너무 빠른 회전 완화 - 천천히 부드럽게 감속 회전 */
+      o.spin.rotation.y += d * 0.4;
+    });
+    R.render(scene, cam); requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
