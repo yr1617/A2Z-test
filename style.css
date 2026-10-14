@@ -41,14 +41,14 @@ main{min-height:100%}
 .hb.fashion{left:62%;top:30%;width:36%;height:60%}
 .shape{position:absolute;z-index:1;display:grid;place-items:center;transition:rotate .4s}
 .shape .ic{width:55%}
-.hb.food .shape{right:2%;bottom:0;width:58%;aspect-ratio:1.15}
-.hb.play .shape{right:2%;top:0;width:54%;aspect-ratio:1.05}
+.hb.food .shape{right:2%;bottom:0;width:58%;aspect-ratio:1.25}
+.hb.play .shape{right:2%;top:0;width:54%;aspect-ratio:1.25}
 .hb.fashion .shape{right:2%;top:0;width:56%;aspect-ratio:1.1}
 .shape svg{position:absolute;inset:0;width:100%;height:100%}
 .shape .ic{position:relative}
-.hb.food .shape path{fill:var(--food)}
-.hb.play .shape path{fill:var(--play)}
-.hb.fashion .shape path{fill:var(--fash)}
+.hb.food .shape path{fill:color-mix(in srgb,var(--food) 45%,var(--paper))}
+.hb.play .shape path{fill:color-mix(in srgb,var(--play) 35%,var(--paper))}
+.hb.fashion .shape path{fill:color-mix(in srgb,var(--fash) 40%,var(--paper))}
 .hb:hover .shape,.hb:focus-visible .shape{rotate:-4deg}
 .hb .txt{position:absolute;z-index:3;left:0;width:clamp(170px,13vw,250px)}
 .hb.food .txt{bottom:12%}.hb.play .txt{top:16%}.hb.fashion .txt{bottom:8%}
@@ -71,7 +71,6 @@ main{min-height:100%}
 .cat2-head p{font-size:14px;font-weight:700;line-height:1.7;max-width:340px}
 .mosaic{display:grid;grid-template-columns:1.15fr 1.7fr;gap:14px;padding:28px 0}
 .c2{position:relative;display:block;color:var(--ink);text-decoration:none;border:2px solid var(--ink);border-radius:18px;overflow:hidden;background:var(--paper);}
-.c2 .ct{transform:skewY(var(--ck,0deg))}
 .c2 .ph{position:absolute;inset:0;background:var(--ps) center/cover no-repeat}  /* 사진: style="background-image:url(...)" 또는 T 데이터의 img 필드 */
 .c2:hover .ph{background-color:var(--pc)}
 .c2.has-img::after{content:"";position:absolute;inset:0;background:rgba(28,28,32,.42)}
@@ -167,9 +166,7 @@ main{min-height:100%}
   .hb .shape,.hb.food .shape,.hb.play .shape,.hb.fashion .shape{position:relative;order:2;width:86%;aspect-ratio:1.1;margin:18px 0 0 auto}
   .hb .txt{position:relative;order:1;width:100%;top:auto;bottom:auto}
   .tip{display:none}
-  .cat2{grid-template-columns:1fr;padding-top:96px}.cat2-head{position:static}
-  .mosaic{grid-template-columns:1fr 1fr;grid-template-rows:none;grid-auto-rows:230px}
-  .c2:nth-child(n){grid-column:auto;grid-row:auto;margin:0}}
+}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important}}
 
 /* ---------- 상세 : 세로형 ---------- */
@@ -217,14 +214,25 @@ main{min-height:100%}
 .cat2-head .tagp,.tw .back{margin-bottom:0}
 @media(max-width:820px){.tw{padding:84px 18px 70px}}
 
-/* 모자이크: 왼쪽 큰 카드 + 오른쪽 묶음. 묶음 안 카드는 같은 기울기를 공유해 서로의 빈틈을 채움 */
-.m-l{min-height:550px;transform:skewY(-3.5deg);--ck:3.5deg}
-.rg{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:268px;gap:14px;transform:skewY(-1.8deg);--ck:1.8deg}
-.rg .c2:nth-child(1){grid-row:1/3}
-.rg .c2:nth-child(n+4){grid-column:1/3}
-.m-l h3{font-size:24px}.m-r h3{font-size:17px}
-.c2{transition:background .2s}
+
+/* ---------- 목록: 서로 맞물리는 모자이크(두 번째 레퍼런스 구조) ----------
+   가로 경계선만 기울이고 세로 경계선은 모두 수직. 열 경계가 위/아래 줄에서 어긋나게 배치 */
+.cat3{position:relative;max-width:1500px;margin:0 auto;padding:96px clamp(16px,3vw,40px) 90px;min-height:100vh}
+.cat3-head{position:absolute;left:clamp(16px,3vw,40px);top:132px;width:21%;z-index:3}
+.cat3-head h2{font-size:clamp(36px,4.2vw,60px);font-weight:800;line-height:1;margin:14px 0 14px}
+.cat3-head p{font-size:14px;font-weight:700;line-height:1.7}
+.mo{display:grid;grid-template-columns:repeat(24,1fr);grid-template-rows:280px 210px 260px;gap:14px;transform:skewY(-1.8deg);--w:-1.8deg;padding-top:24px}
+.mo>.m1{grid-column:7/17;grid-row:1/3;--a:-1.2deg}
+.mo>.m2{grid-column:17/25;grid-row:1/3;--a:.8deg}
+.mo>.m3{grid-column:1/11;grid-row:3;--a:1deg}
+.mo>.m4{grid-column:11/25;grid-row:3;--a:-.8deg}
+.mo>.m5{grid-column:span 12;min-height:220px}
+.c2{border-radius:18px;transform:skewY(var(--a,0deg));transition:background .2s}
+.c2 .ct{transform:skewY(calc(-1 * (var(--w,0deg) + var(--a,0deg))))}
+.m1 h3{font-size:24px}.m2 h3,.m3 h3,.m4 h3{font-size:18px}
 @media(max-width:820px){
-  .mosaic{grid-template-columns:1fr}.m-l,.rg{transform:none;--ck:0deg}.m-l{min-height:300px}
-  .rg{grid-template-columns:1fr 1fr;grid-auto-rows:220px}.rg .c2:nth-child(1){grid-row:auto}
+  .cat3{padding-top:90px}.cat3-head{position:static;width:auto;margin-bottom:20px}
+  .mo{transform:none;--w:0deg;grid-template-columns:1fr 1fr;grid-template-rows:none;grid-auto-rows:210px;padding-top:0}
+  .mo>.m1{grid-column:1/3;grid-row:span 2}.mo>.m2,.mo>.m3,.mo>.m4,.mo>.m5{grid-column:auto;grid-row:auto}
+  .c2{transform:none}.c2 .ct{transform:none}
 }
