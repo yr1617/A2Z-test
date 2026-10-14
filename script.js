@@ -491,10 +491,41 @@ async function tutorial(sp) {
   }
 }
 
+/* 목록 카드: 세로 변은 수직, 위·아래 변은 카드마다 다른 각도의 사각형 (TL, TR, BR, BL — 영역 대비 비율) */
+const GEO = [
+  [[0, .0907], [.3543, 0], [.3543, .9176], [0, .993]],
+  [[.3723, .0137], [.7051, .0659], [.7051, .4711], [.3723, .5275]],
+  [[.7223, .0769], [1, 0], [1, .434], [.7223, .4725]],
+  [[.374, .5645], [.9991, .4643], [.9991, .8969], [.374, 1]],
+];
+function roundedPath(pts, r) {
+  const n = pts.length; let d = '';
+  for (let i = 0; i < n; i++) {
+    const p0 = pts[(i + n - 1) % n], p1 = pts[i], p2 = pts[(i + 1) % n];
+    const v1 = [p0[0] - p1[0], p0[1] - p1[1]], v2 = [p2[0] - p1[0], p2[1] - p1[1]], l1 = Math.hypot(...v1), l2 = Math.hypot(...v2);
+    const a = [p1[0] + v1[0] / l1 * r, p1[1] + v1[1] / l1 * r], b = [p1[0] + v2[0] / l2 * r, p1[1] + v2[1] / l2 * r];
+    d += `${i ? 'L' : 'M'}${a[0].toFixed(1)} ${a[1].toFixed(1)}Q${p1[0].toFixed(1)} ${p1[1].toFixed(1)} ${b[0].toFixed(1)} ${b[1].toFixed(1)}`;
+  }
+  return d + 'Z';
+}
+function layoutCards(mo) {
+  const W = mo.clientWidth, H = mo.clientHeight;
+  $$('.c3', mo).forEach((el, i) => {
+    const g = GEO[i]; if (!g) return;
+    const P = g.map(([x, y]) => [x * W, y * H]), xs = P.map(p => p[0]), ys = P.map(p => p[1]);
+    const x0 = Math.min(...xs), y0 = Math.min(...ys), w = Math.max(...xs) - x0, h = Math.max(...ys) - y0;
+    const Q = P.map(p => [p[0] - x0, p[1] - y0]), d = roundedPath(Q, 14), [, , BR, BL] = Q, xt = Math.min(w * .7, 340);
+    Object.assign(el.style, { left: x0 + 'px', top: y0 + 'px', width: w + 'px', height: h + 'px', clipPath: `path('${d}')` });
+    $('.ol', el).innerHTML = `<path d="${d}"/>`;
+    $('.ct', el).style.bottom = (h - (BL[1] + (BR[1] - BL[1]) * xt / w) + 30) + 'px';
+  });
+}
 function category(k) {
-  const C = CATS[k], ts = T[k], pos = ['m1', 'm2', 'm3', 'm4'];
-  const card = (t, i) => `<a class="c2 ${pos[i] || 'm5'}${t.img ? ' has-img' : ''}" href="#/t/${k}/${i}"><div class="ph"${t.img ? ` style="background-image:url(${t.img})"` : ''}></div><div class="ct"><h3>${t.t}</h3><p>${t.lead.split('.')[0]}.</p><span class="view-more">VIEW MORE →</span></div></a>`;
-  app.innerHTML = `<section class="view cat3"><div class="cat3-head"><span class="tagp ${k}">${LAB[k]}</span><h2>${C.n}</h2><p>${C.d}</p></div><div class="mo">${ts.map(card).join('')}</div></section>`;
+  const C = CATS[k], ts = T[k];
+  const chev = '<svg viewBox="0 0 8 12" width="7" height="11"><path d="M1.5 1.5l4.5 4.5-4.5 4.5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const card = (t, i) => `<a class="c3${t.img ? ' has-img' : ''}" href="#/t/${k}/${i}"><div class="ph"${t.img ? ` style="background-image:url(${t.img})"` : ''}></div><svg class="ol"></svg><div class="ct"><h3>${t.t}</h3><p>${t.lead.split('.')[0]}.</p><span class="vm">VIEW MORE ${chev}</span></div></a>`;
+  app.innerHTML = `<section class="view cat4"><div class="cat4-head"><span class="tagp ${k}">${LAB[k]}</span><h2>${C.n}</h2><p>${C.d}</p></div><div class="mo2">${ts.slice(0, 4).map(card).join('')}</div></section>`;
+  const mo = $('.mo2'); layoutCards(mo); new ResizeObserver(() => layoutCards(mo)).observe(mo);
 }
 
 function trend(k, i) {
