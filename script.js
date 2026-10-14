@@ -458,12 +458,9 @@ const X = {
 const app = $('#app'), nav = $('#nav');
 $('.logo').innerHTML = LOGO;
 
-const DECO = [[3, 14, 34, '#FFEA00', 's'], [31, 7, 20, '#F65AC2', 'c'], [48, 3, 38, '#1C94F5', 's'], [62, 20, 18, '#FFEA00', 'c'], [90, 9, 36, '#F65AC2', 's'], [96, 47, 16, '#1C94F5', 'c'], [29, 50, 26, '#1C94F5', 's'], [57, 66, 30, '#F65AC2', 's'], [47, 90, 20, '#FFEA00', 'c'], [79, 90, 34, '#1C94F5', 's'], [2, 62, 18, '#F65AC2', 'c']];
-const deco = () => DECO.map(([x, y, w, c, k]) => `<span class="dc" style="left:${x}%;top:${y}%;width:${w}px"><svg viewBox="0 0 24 24">${k === 's' ? `<path d="M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0z" fill="${c}"/>` : `<circle cx="12" cy="12" r="9" fill="none" stroke="${c}" stroke-width="4"/>`}</svg></span>`).join('');
-
 function home() {
   const ks = Object.keys(CATS);
-  app.innerHTML = `<section class="view space">${deco()}${ks.map(k => `<a class="hb ${k}" href="#/cat/${k}" aria-label="${CATS[k].n}"><div class="shape">${BLOB[k]}</div><div class="txt"><span class="tagp ${k}">${LAB[k]}</span><h2>${CATS[k].n}</h2><p>${CATS[k].d}</p><span class="view-more">VIEW →</span></div></a>`).join('')}
+  app.innerHTML = `<section class="view space">${ks.map(k => `<a class="hb ${k}" href="#/cat/${k}" aria-label="${CATS[k].n}"><div class="shape">${BLOB[k]}</div><div class="txt"><span class="tagp ${k}">${LAB[k]}</span><h2>${CATS[k].n}</h2><p>${CATS[k].d}</p><span class="view-more">VIEW →</span></div></a>`).join('')}
     <div class="ripple"></div>
     <svg class="cursor" viewBox="0 0 24 24"><path d="M5 2l14 11-6.5 1.2L9.8 21z" fill="#FEFEFE" stroke="#1C1C20" stroke-width="1.5" stroke-linejoin="round"/></svg>
     <div class="tip">오브젝트를 클릭해보세요</div></section>`;
@@ -496,8 +493,10 @@ async function tutorial(sp) {
 
 function category(k) {
   const C = CATS[k];
+  const card = (t, i, cls) => `<a class="c2 ${cls}${t.img ? ' has-img' : ''}" href="#/t/${k}/${i}"><div class="ph"${t.img ? ` style="background-image:url(${t.img})"` : ''}></div><div class="ct"><h3>${t.t}</h3><p>${t.lead.split('.')[0]}.</p><span class="view-more">VIEW MORE →</span></div></a>`;
+  const ts = T[k];
   app.innerHTML = `<section class="view cat2"><div class="cat2-head"><span class="tagp ${k}">${LAB[k]}</span><h2>${C.n}</h2><p>${C.d}</p></div>
-    <div class="mosaic">${T[k].map((t, i) => `<a class="c2${t.img ? ' has-img' : ''}" href="#/t/${k}/${i}"><div class="ph"${t.img ? ` style="background-image:url(${t.img})"` : ''}></div><div class="ct"><h3>${t.t}</h3><p>${t.lead.split('.')[0]}.</p><span class="view-more">VIEW MORE →</span></div></a>`).join('')}</div></section>`;
+    <div class="mosaic">${card(ts[0], 0, 'm-l')}<div class="rg">${ts.slice(1).map((t, i) => card(t, i + 1, 'm-r')).join('')}</div></div></section>`;
 }
 
 function trend(k, i) {
@@ -539,7 +538,7 @@ function space3d(sp) {
   };
   const food = g => {
     add(g, new THREE.LatheGeometry([[0, -.7], [.55, -.7], [.9, -.45], [1.25, .35], [1.32, .5], [1.2, .5], [.85, -.3], [0, -.35]].map(p => new THREE.Vector2(...p)), 48),
-      new THREE.MeshStandardMaterial({ color: 0xFFEA00, roughness: .35, side: THREE.DoubleSide }));
+      new THREE.MeshStandardMaterial({ color: 0xFEFEFE, roughness: .35, side: THREE.DoubleSide }));
     add(g, new THREE.CircleGeometry(1.1, 40), 0xE8472B, [0, .3, 0]).rotation.x = -Math.PI / 2;
     add(g, new THREE.TorusGeometry(.45, .09, 10, 30), 0xFFD27A, [.25, .34, -.1]).rotation.x = Math.PI / 2;
     add(g, S(.3), 0xFEFEFE, [-.4, .4, .2], [1, .7, 1]); add(g, S(.14), 0xFFB300, [-.4, .55, .2]);
@@ -547,16 +546,16 @@ function space3d(sp) {
     [.3, .6].forEach(z => add(g, new THREE.CylinderGeometry(.04, .04, 2.9, 8), 0x1C1C20, [0, .62, z]).rotation.z = Math.PI / 2);
   };
   const play = g => {
-    add(g, S(1), 0x1C94F5, [0, 0, 0], [1.45, .45, .85]);
-    [-1, 1].forEach(s => add(g, S(1), 0x1C94F5, [s * 1.0, -.02, .62], [.5, .42, .95]));
+    add(g, S(1), 0x1C1C20, [0, 0, 0], [1.45, .45, .85]);
+    [-1, 1].forEach(s => add(g, S(1), 0x1C1C20, [s * 1.0, -.02, .62], [.5, .42, .95]));
     add(g, B(.55, .1, .17), 0xFEFEFE, [-.75, .43, -.1]); add(g, B(.17, .1, .55), 0xFEFEFE, [-.75, .43, -.1]);
     [[.2, 0, 0xF65AC2], [-.2, 0, 0xFFEA00], [0, .2, 0x7BE0B0], [0, -.2, 0xFEFEFE]].forEach(([x, z, c]) => add(g, S(.12), c, [.75 + x, .43, -.1 + z]));
-    [-.4, .4].forEach(x => add(g, new THREE.CylinderGeometry(.17, .2, .14, 20), 0x1C1C20, [x, .43, .35]));
+    [-.4, .4].forEach(x => add(g, new THREE.CylinderGeometry(.17, .2, .14, 20), 0x4B4F59, [x, .43, .35]));
   };
   const fashion = g => {
-    add(g, new THREE.SphereGeometry(1.1, 32, 20, 0, Math.PI * 2, 0, Math.PI / 2), new THREE.MeshStandardMaterial({ color: 0xF65AC2, roughness: .5, side: THREE.DoubleSide }), [0, 0, 0], [1, .9, 1]);
-    add(g, new THREE.CylinderGeometry(1.2, 1.2, .1, 32, 1, false, -Math.PI / 2, Math.PI), 0xE04AAE, [0, -.02, .05], [1, 1, 1.45]);
-    add(g, S(.12), 0xFEFEFE, [0, .98, 0]);
+    add(g, new THREE.SphereGeometry(1.1, 32, 20, 0, Math.PI * 2, 0, Math.PI / 2), new THREE.MeshStandardMaterial({ color: 0xFEFEFE, roughness: .5, side: THREE.DoubleSide }), [0, 0, 0], [1, .9, 1]);
+    add(g, new THREE.CylinderGeometry(1.2, 1.2, .1, 32, 1, false, -Math.PI / 2, Math.PI), 0xE1E5EA, [0, -.02, .05], [1, 1, 1.45]);
+    add(g, S(.12), 0x1C1C20, [0, .98, 0]);
     [-1, 1].forEach(s => { add(g, S(1), 0xFEFEFE, [s * .65, -.95, 1.0], [.55, .4, .1]); add(g, S(1), 0x1C1C20, [s * .65, -.95, 1.07], [.46, .32, .06]); });
     add(g, B(.3, .07, .07), 0xFEFEFE, [0, -.88, 1.0]);
   };
