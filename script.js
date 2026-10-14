@@ -1,16 +1,13 @@
 /* ==========================================================================
-   A2Z (에이투지) - 메인 스크립트
+   A2Z - 메인 스크립트 (안정성 강화)
    ========================================================================== */
 
-// 색상 상수 정의
 const COLOR_FOOD = '#FFEA00';
 const COLOR_PLAY = '#1C94F5';
 const COLOR_FASHION = '#F65AC2';
 const COLOR_BLACK = '#1C1C20';
 const COLOR_WHITE = '#FEFEFE';
-const COLOR_GRAY = '#E1E5EA';
 
-// 트렌드 데이터베이스
 const TREND_DATA = {
   FOOD: {
     title: '먹거리',
@@ -21,7 +18,7 @@ const TREND_DATA = {
         id: 'tomato_maratang',
         title: '토마토 마라탕',
         emoji: '🍅',
-        desc: '얼큰하고 알싸한 마라탕 베이스에 상큼하고 부드러운 토마토를 더해 매운맛을 달콤하게 완화한 트렌드 요리입니다. 매운 것을 잘 못 드시는 자녀나 부모님도 맛있게 즐길 수 있어 전 세대의 식탁에서 사랑받고 있습니다.',
+        desc: '얼큰하고 알싸한 마라탕 베이스에 상큼하고 부드러운 토마토를 더해 매운맛을 달콤하게 완화한 트렌드 요리입니다. 매운 것을 잘 못 드시는 온 가족이 함께 부담 없이 즐길 수 있는 맛입니다.',
         type: 'eat',
         foodName: '토마토 마라탕'
       },
@@ -29,7 +26,7 @@ const TREND_DATA = {
         id: 'pizza_seolgi',
         title: '피자 설기',
         emoji: '🍕',
-        desc: '전통 백설기의 쫀득하고 담백한 식감 위에 고소한 치즈와 짭조름한 피자 토핑을 올려 현대적으로 재해석한 떡 요리입니다. 어르신들에게는 익숙한 떡의 친숙함을, 젊은 층에게는 피자의 색다른 맛을 동시에 선사합니다.',
+        desc: '전통 백설기의 쫀득하고 담백한 식감 위에 고소한 치즈와 짭조름한 피자 토핑을 올려 현대적으로 재해석한 떡 요리입니다. 예스러운 떡의 친숙함과 피자의 색다른 맛을 함께 느낄 수 있습니다.',
         type: 'eat',
         foodName: '피자 설기'
       },
@@ -37,7 +34,7 @@ const TREND_DATA = {
         id: 'ramen_dry',
         title: '라면 말려먹기',
         emoji: '🍜',
-        desc: '조금 짜고 진하게 끓인 국물 라면에서 면발만 접시에 건져내어 잠시 식혀두는 유행입니다. 면이 살짝 건조해지면서 한층 뻑뻑하고 꼬들꼬들해진 특유의 감칠맛 식감을 다 함께 경험해 보세요.',
+        desc: '조금 짜고 진하게 끓인 국물 라면에서 면발만 접시에 건져내어 잠시 식혀두는 유행입니다. 면이 조금 건조해지면서 한층 뻑뻑하고 꼬들꼬들해진 특유의 감칠맛 식감을 직접 느껴보세요.',
         type: 'eat',
         foodName: '꼬들한 말린 라면'
       }
@@ -52,21 +49,21 @@ const TREND_DATA = {
         id: 'squishy',
         title: '말랑이',
         emoji: '🐾',
-        desc: '손으로 꾹꾹 누르면 부드럽게 모양이 변했다가 되돌아오는 촉감 토이입니다. 손끝에 전해지는 푹신한 자극이 일상의 스트레스를 해소해주어 청소년부터 어른들까지 마음을 편안하게 해주는 힐링 아이템입니다.',
+        desc: '손으로 꾹꾹 누르면 부드럽게 모양이 변했다가 되돌아오는 촉감 토이입니다. 손끝에 전해지는 푹신한 자극이 일상의 스트레스를 해소해 주어 마음을 편안하게 만들어 줍니다.',
         type: 'squishy'
       },
       {
         id: 'chiikawa_clicker',
         title: '먼작귀 클리커',
         emoji: '🐥',
-        desc: '귀엽고 작아서 소중한 캐릭터를 화면에서 마음껏 터치하며 하트를 모으는 클리커 게임입니다. 단순한 조작으로 누구나 쉽게 즐길 수 있으며, 보는 것만으로도 미소를 자아냅니다.',
+        desc: '귀엽고 소중한 캐릭터를 화면에서 마음껏 터치하며 하트를 모으는 클리커 게임입니다. 단순하고 직관적인 조작으로 누구나 부담 없이 즐기며 소소한 재미를 느낄 수 있습니다.',
         type: 'clicker'
       },
       {
         id: 'mejirushi',
         title: '메지루시',
         emoji: '☂️',
-        desc: '자신의 우산 손잡이나 가방에 톡톡 튀는 아크릴 참과 링을 달아 내 물건임을 쉽게 표시하는 표식 참 트렌드입니다. 나만의 개성을 정성스럽게 표현하고 소중한 소지품을 지켜보세요.',
+        desc: '자신의 우산 손잡이나 가방에 아크릴 참과 링을 달아 내 물건임을 쉽게 표시하는 참 트렌드입니다. 나만의 개성을 담아 소중한 소지품을 정성스럽게 연출해 보세요.',
         type: 'mejirushi'
       }
     ]
@@ -80,59 +77,45 @@ const TREND_DATA = {
         id: 'dongmyo',
         title: '동묘 쇼핑',
         emoji: '🛍️',
-        desc: '레트로한 분위기와 세월의 흔적이 담긴 보물을 찾을 수 있는 동묘 거리 쇼핑입니다. 부모님 세대의 추억이 담긴 빈티지 의류를 자녀 세대가 재해석하여 나만의 독특한 스타일을 만들어갑니다.',
+        desc: '레트로한 분위기와 세월의 흔적이 담긴 보물을 탐색할 수 있는 동묘 거리 쇼핑입니다. 아날로그 감성의 빈티지 의류와 소품을 찾아보며 나만의 멋을 완성해 보세요.',
         type: 'dongmyo'
       },
       {
         id: 'jade_style',
         title: '옥 스타일링',
         emoji: '💍',
-        desc: '어르신들의 단아한 장신구로 여겨지던 은은한 옥(Jade)을 현대적인 모던 자켓이나 캐주얼한 옷차림에 세련되게 매치하는 스타일입니다. 예스러움이 가장 트렌디한 포인트를 완성해 줍니다.',
+        desc: '단아한 분위기의 은은한 옥(Jade) 장신구를 모던한 자켓이나 캐주얼한 옷차림에 세련되게 매치하는 스타일입니다. 클래식함이 가장 감각적인 포인트를 연출해 줍니다.',
         type: 'jade'
       },
       {
         id: 'jelly_shoes',
         title: '젤리슈즈 꾸미기',
         emoji: '👡',
-        desc: '말랑말랑한 젤리 슈즈의 구멍에 아기자기한 파츠와 스티커를 꽂아 나만의 신발을 만드는 DIY 패션입니다. 알록달록한 개성을 살려 여유로운 스타일을 완성해 보세요.',
+        desc: '말랑한 젤리 슈즈의 구멍에 아기자기한 파츠를 꽂아 나만의 신발을 완성하는 DIY 패션입니다. 알록달록한 재미와 개성을 살려 가볍게 연출해 보세요.',
         type: 'jelly'
       },
       {
         id: 'pen_decor',
         title: '볼펜 꾸미기',
         emoji: '🖊️',
-        desc: '매일 사용하는 볼펜 상단에 구슬, 클립, 캐릭터 참을 조합하여 개성 있는 나만의 문구를 만드는 유행입니다. 소소한 일상 속 소품에 나만의 멋을 더해줍니다.',
+        desc: '매일 사용하는 볼펜 상단에 구슬과 캐릭터 참을 조합하여 개성 있는 문구를 만드는 유행입니다. 일상 속 소소한 아이템에 특별함을 더해줍니다.',
         type: 'pen'
       }
     ]
   }
 };
 
-// 현재 애플리케이션 상태
 let currentCategory = null;
-let currentTrend = null;
 
-// DOM 요소 참조
-const navTabs = document.getElementById('nav-tabs');
-const logoBtn = document.getElementById('logo-btn');
-const mainScreen = document.getElementById('main-screen');
-const categoryScreen = document.getElementById('category-screen');
-const detailScreen = document.getElementById('detail-screen');
-
-// --------------------------------------------------------------------------
-// 초기화 및 화면 전환 로직
-// --------------------------------------------------------------------------
-window.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
   initThreeJS();
   setupEventListeners();
-  showMainScreen(); // 초기 진입은 메인 화면
+  showMainScreen();
 });
 
 function setupEventListeners() {
-  // 로고 클릭 시 메인으로 이동
-  logoBtn.addEventListener('click', showMainScreen);
+  document.getElementById('logo-btn').addEventListener('click', showMainScreen);
 
-  // 헤더 탭 클릭 이벤트
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const catKey = e.target.getAttribute('data-category');
@@ -140,7 +123,6 @@ function setupEventListeners() {
     });
   });
 
-  // 뒤로가기 버튼
   document.getElementById('back-to-cat-btn').addEventListener('click', () => {
     if (currentCategory) {
       showCategoryScreen(currentCategory);
@@ -150,34 +132,28 @@ function setupEventListeners() {
   });
 }
 
-// 1. 메인 화면 보이기 (오른쪽 상단 탭 숨김 처리 완료)
 function showMainScreen() {
-  switchScreen(mainScreen);
-  navTabs.classList.add('hidden'); // 3. 메인화면에서는 탭 비활성화
+  switchScreen(document.getElementById('main-screen'));
+  document.getElementById('nav-tabs').classList.add('hidden');
   currentCategory = null;
 }
 
-// 2. 카테고리 상세 화면 보이기
 function showCategoryScreen(catKey) {
   currentCategory = catKey;
   const data = TREND_DATA[catKey];
   
-  switchScreen(categoryScreen);
-  navTabs.classList.remove('hidden'); // 카테고리 진입 시 탭 노출
+  switchScreen(document.getElementById('category-screen'));
+  document.getElementById('nav-tabs').classList.remove('hidden');
 
-  // 탭 active 업데이트
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.classList.toggle('active', btn.getAttribute('data-category') === catKey);
   });
 
-  // 헤더 텍스트 설정
   const titleEl = document.getElementById('category-title');
-  const descEl = document.getElementById('category-desc');
   titleEl.textContent = data.title;
   titleEl.style.color = data.color === COLOR_FOOD ? '#D4B800' : data.color;
-  descEl.textContent = data.desc;
+  document.getElementById('category-desc').textContent = data.desc;
 
-  // 카드 그리드 생성 (2. 호버 시 형태 변경 없이 유연한 상승 및 그림자 효과)
   const gridEl = document.getElementById('trend-cards-grid');
   gridEl.innerHTML = '';
 
@@ -198,10 +174,8 @@ function showCategoryScreen(catKey) {
   });
 }
 
-// 4. 세로 화면 구성의 트렌드 상세 화면 보이기
 function showDetailScreen(catKey, item) {
-  currentTrend = item;
-  switchScreen(detailScreen);
+  switchScreen(document.getElementById('detail-screen'));
 
   const catData = TREND_DATA[catKey];
   const badgeEl = document.getElementById('detail-badge');
@@ -210,14 +184,11 @@ function showDetailScreen(catKey, item) {
   badgeEl.style.color = catKey === 'FOOD' ? COLOR_BLACK : COLOR_WHITE;
 
   document.getElementById('detail-title').textContent = item.title;
-  
-  // 길어진 상세 설명 세팅 (모든 세대가 완벽히 공감할 수 있는 따뜻한 어조)
   document.getElementById('detail-description').innerHTML = `
     <p>${item.desc}</p>
-    <p>A2Z는 이 트렌드를 통해 서로 다른 세대가 하나의 신선한 주제로 소통하며 한 걸음 더 가까워지기를 기대합니다. 아래의 인터랙션을 통해 유행을 즐겨보세요!</p>
+    <p>A2Z는 이 트렌드를 통해 서로 다른 일상의 감성이 하나로 연결되기를 기대합니다. 아래에서 직접 만지고 체험해 보세요!</p>
   `;
 
-  // 7. 각 트렌드별 고품질 인터랙션 빌드
   buildInteractionStage(item);
 }
 
@@ -228,15 +199,15 @@ function switchScreen(targetScreen) {
 }
 
 // --------------------------------------------------------------------------
-// 1. Three.js 3D 메인 공간 구축 (오브젝트 크기 확대 및 6. 흰색 탈피 배경 연출)
+// Three.js 3D 공간 연출
 // --------------------------------------------------------------------------
 let scene, camera, renderer, objects = [];
 
 function initThreeJS() {
   const container = document.getElementById('canvas-container');
-  
+  if (!container || typeof THREE === 'undefined') return;
+
   scene = new THREE.Scene();
-  // 연한 파스텔 그레이톤의 세련된 공간 배경
   scene.background = new THREE.Color(0xE1E5EA);
 
   camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -245,82 +216,72 @@ function initThreeJS() {
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.shadowMap.enabled = true;
   container.appendChild(renderer.domElement);
 
-  // 조명 설정
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
   scene.add(ambientLight);
 
-  const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
+  const dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
   dirLight.position.set(5, 12, 7);
-  dirLight.castShadow = true;
   scene.add(dirLight);
 
-  // 세련된 공간 그리드 바닥 연출
   const gridHelper = new THREE.GridHelper(30, 20, 0x1C1C20, 0xB0B8C4);
   gridHelper.position.y = -2;
   scene.add(gridHelper);
 
-  // 1. 메인 화면 3D 오브젝트 크기를 확실히 키움 (기존 대비 1.5배 이상)
-  // 먹거리 3D 오브젝트 (원통형 버거/도넛 형상)
+  // 먹거리 (Cylinder)
   const foodGeo = new THREE.CylinderGeometry(1.4, 1.4, 1.2, 32);
-  const foodMat = new THREE.MeshStandardMaterial({ color: 0xFFEA00, roughness: 0.3, metalness: 0.1 });
+  const foodMat = new THREE.MeshStandardMaterial({ color: 0xFFEA00, roughness: 0.3 });
   const foodObj = new THREE.Mesh(foodGeo, foodMat);
   foodObj.position.set(-3.6, 0.2, 0);
   foodObj.userData = { category: 'FOOD' };
   scene.add(foodObj);
   objects.push(foodObj);
 
-  // 놀거리 3D 오브젝트 (구형 게임 콘솔/주사위 형상)
+  // 놀거리 (Icosahedron)
   const playGeo = new THREE.IcosahedronGeometry(1.4, 2);
-  const playMat = new THREE.MeshStandardMaterial({ color: 0x1C94F5, roughness: 0.2, metalness: 0.2 });
+  const playMat = new THREE.MeshStandardMaterial({ color: 0x1C94F5, roughness: 0.2 });
   const playObj = new THREE.Mesh(playGeo, playMat);
   playObj.position.set(0, 0.2, 0);
   playObj.userData = { category: 'PLAY' };
   scene.add(playObj);
   objects.push(playObj);
 
-  // 패션 3D 오브젝트 (다이아몬드/옷걸이 형태)
+  // 패션 (Octahedron)
   const fashionGeo = new THREE.OctahedronGeometry(1.5, 0);
-  const fashionMat = new THREE.MeshStandardMaterial({ color: 0xF65AC2, roughness: 0.2, metalness: 0.3 });
+  const fashionMat = new THREE.MeshStandardMaterial({ color: 0xF65AC2, roughness: 0.2 });
   const fashionObj = new THREE.Mesh(fashionGeo, fashionMat);
   fashionObj.position.set(3.6, 0.2, 0);
   fashionObj.userData = { category: 'FASHION' };
   scene.add(fashionObj);
   objects.push(fashionObj);
 
-  // 레이캐스터를 이용한 3D 클릭 연동
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
 
-  window.addEventListener('click', (e) => {
+  container.addEventListener('click', (e) => {
+    const mainScreen = document.getElementById('main-screen');
     if (!mainScreen.classList.contains('active')) return;
-    
-    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+    const rect = renderer.domElement.getBoundingClientRect();
+    mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
 
     raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObjects(objects);
 
     if (intersects.length > 0) {
-      const selectedCategory = intersects[0].object.userData.category;
-      showCategoryScreen(selectedCategory);
+      showCategoryScreen(intersects[0].object.userData.category);
     }
   });
 
-  // 애니메이션 루프
   function animate() {
     requestAnimationFrame(animate);
-    
-    // 오브젝트의 부드러운 회전 및 위아래 바운싱
     const time = Date.now() * 0.0015;
     objects.forEach((obj, idx) => {
       obj.rotation.y += 0.01;
-      obj.rotation.x += 0.005;
       obj.position.y = Math.sin(time + idx * 2) * 0.2 + 0.2;
     });
-
     renderer.render(scene, camera);
   }
   animate();
@@ -333,71 +294,47 @@ function initThreeJS() {
 }
 
 // --------------------------------------------------------------------------
-// 7. 디테일 업그레이드된 인터랙션 구현부
+// 인터랙션 구현부
 // --------------------------------------------------------------------------
 function buildInteractionStage(item) {
   const stage = document.getElementById('interactive-container');
   stage.innerHTML = '';
 
   switch (item.type) {
-    case 'eat':
-      renderEatingInteraction(stage, item.foodName, item.emoji);
-      break;
-    case 'squishy':
-      renderSquishyInteraction(stage);
-      break;
-    case 'clicker':
-      renderClickerInteraction(stage);
-      break;
-    case 'mejirushi':
-      renderMejirushiInteraction(stage);
-      break;
-    case 'dongmyo':
-      renderDongmyoInteraction(stage);
-      break;
-    case 'jade':
-      renderJadeInteraction(stage);
-      break;
-    case 'jelly':
-      renderJellyInteraction(stage);
-      break;
-    case 'pen':
-      renderPenInteraction(stage);
-      break;
-    default:
-      stage.innerHTML = `<p>체험 준비 중입니다.</p>`;
+    case 'eat': renderEating(stage, item.foodName, item.emoji); break;
+    case 'squishy': renderSquishy(stage); break;
+    case 'clicker': renderClicker(stage); break;
+    case 'mejirushi': renderMejirushi(stage); break;
+    case 'dongmyo': renderDongmyo(stage); break;
+    case 'jade': renderJade(stage); break;
+    case 'jelly': renderJelly(stage); break;
+    case 'pen': renderPen(stage); break;
   }
 }
 
-// [먹기 인터랙션] 마라탕, 피자설기, 라면 말려먹기 (한 입씩 베어먹기)
-function renderEatingInteraction(container, foodName, emoji) {
+function renderEating(container, foodName, emoji) {
   let bites = 0;
   const maxBites = 5;
 
-  const wrapper = document.createElement('div');
-  wrapper.className = 'eating-container';
-  wrapper.innerHTML = `
-    <div class="food-plate" id="food-plate-target">
-      <span id="food-emoji" style="transition: transform 0.2s">${emoji}</span>
+  container.innerHTML = `
+    <div class="eating-container">
+      <div class="food-plate" id="plate-btn">
+        <span id="food-emoji" style="transition: transform 0.2s">${emoji}</span>
+      </div>
+      <p style="font-weight:700; font-size:16px; margin-bottom:12px;" id="eat-status">클릭하여 ${foodName} 한 입 먹기!</p>
+      <button class="action-btn" id="refill-btn">새로 가져오기 🔄</button>
     </div>
-    <p style="font-weight:700; font-size:16px; margin-bottom:12px;" id="eat-status-text">
-      클릭하여 ${foodName} 한 입 먹기!
-    </p>
-    <button class="action-btn" id="refill-btn">새로 가져오기 🔄</button>
   `;
-  container.appendChild(wrapper);
 
-  const plate = wrapper.querySelector('#food-plate-target');
-  const foodEmoji = wrapper.querySelector('#food-emoji');
-  const statusText = wrapper.querySelector('#eat-status-text');
+  const plate = container.querySelector('#plate-btn');
+  const foodEmoji = container.querySelector('#food-emoji');
+  const status = container.querySelector('#eat-status');
 
   plate.addEventListener('click', (e) => {
     if (bites < maxBites) {
       bites++;
-      const scale = 1 - bites * 0.18;
-      foodEmoji.style.transform = `scale(${scale})`;
+      foodEmoji.style.transform = `scale(${1 - bites * 0.18})`;
       
-      // 베어먹은 이펙트
       const effect = document.createElement('span');
       effect.className = 'bite-effect';
       effect.textContent = '얌얌! 😋';
@@ -407,269 +344,234 @@ function renderEatingInteraction(container, foodName, emoji) {
       setTimeout(() => effect.remove(), 600);
 
       if (bites === maxBites) {
-        statusText.textContent = `맛있게 다 먹었습니다! 싹 비워진 접시 🍽️`;
+        status.textContent = `맛있게 다 먹었습니다! 🍽️`;
         foodEmoji.style.opacity = '0.1';
       } else {
-        statusText.textContent = `${foodName} ${bites}입 먹는 중... (남은 양: ${maxBites - bites}입)`;
+        status.textContent = `${foodName} ${bites}입 먹는 중... (남은 양: ${maxBites - bites}입)`;
       }
     }
   });
 
-  wrapper.querySelector('#refill-btn').addEventListener('click', () => {
+  container.querySelector('#refill-btn').addEventListener('click', () => {
     bites = 0;
     foodEmoji.style.transform = 'scale(1)';
     foodEmoji.style.opacity = '1';
-    statusText.textContent = `클릭하여 ${foodName} 한 입 먹기!`;
+    status.textContent = `클릭하여 ${foodName} 한 입 먹기!`;
   });
 }
 
-// [말랑이 인터랙션] 여러 종류별 누르기
-function renderSquishyInteraction(container) {
+function renderSquishy(container) {
   const squishies = [
-    { name: '냥발 말랑이', emoji: '🐾', bg: '#FFD6E0' },
-    { name: '복숭아 말랑이', emoji: '🍑', bg: '#FFECEF' },
-    { name: '곰돌이 말랑이', emoji: '🧸', bg: '#E2ECE9' },
-    { name: '별 말랑이', emoji: '⭐', bg: '#FFF3B0' }
+    { name: '냥발', emoji: '🐾', bg: '#FFD6E0' },
+    { name: '복숭아', emoji: '🍑', bg: '#FFECEF' },
+    { name: '곰돌이', emoji: '🧸', bg: '#E2ECE9' }
   ];
-  let selected = squishies[0];
 
-  const wrapper = document.createElement('div');
-  wrapper.className = 'squishy-wrapper';
-  wrapper.innerHTML = `
-    <div class="squishy-selector">
-      ${squishies.map((s, i) => `<button class="squishy-type-btn ${i===0?'active':''}" data-idx="${i}">${s.name}</button>`).join('')}
+  container.innerHTML = `
+    <div class="squishy-wrapper">
+      <div class="squishy-selector">
+        ${squishies.map((s, i) => `<button class="squishy-type-btn ${i===0?'active':''}" data-idx="${i}">${s.name}</button>`).join('')}
+      </div>
+      <div class="squishy-main-obj" id="squishy-obj" style="background:${squishies[0].bg}">
+        <span>${squishies[0].emoji}</span>
+      </div>
+      <p style="font-weight:700">말랑이를 꾹 눌렀다 떼어보세요!</p>
     </div>
-    <div class="squishy-main-obj" id="squishy-target" style="background:${selected.bg}">
-      <span>${selected.emoji}</span>
-    </div>
-    <p style="font-weight:700; color:var(--color-gray-dark)">말랑이를 꾹 눌렀다 떼어보세요!</p>
   `;
-  container.appendChild(wrapper);
 
-  const target = wrapper.querySelector('#squishy-target');
-  const btns = wrapper.querySelectorAll('.squishy-type-btn');
+  const obj = container.querySelector('#squishy-obj');
+  const btns = container.querySelectorAll('.squishy-type-btn');
 
   btns.forEach(btn => {
     btn.addEventListener('click', (e) => {
       btns.forEach(b => b.classList.remove('active'));
       e.target.classList.add('active');
-      selected = squishies[e.target.dataset.idx];
-      target.style.background = selected.bg;
-      target.querySelector('span').textContent = selected.emoji;
+      const item = squishies[e.target.dataset.idx];
+      obj.style.background = item.bg;
+      obj.querySelector('span').textContent = item.emoji;
     });
   });
 
-  target.addEventListener('mousedown', () => {
-    target.style.transform = 'scale(0.7) rotate(-5deg)';
-    target.style.borderRadius = '60px';
-  });
-
-  window.addEventListener('mouseup', () => {
-    target.style.transform = 'scale(1) rotate(0deg)';
-    target.style.borderRadius = '40px';
-  });
+  obj.addEventListener('mousedown', () => { obj.style.transform = 'scale(0.7) rotate(-5deg)'; });
+  obj.addEventListener('mouseup', () => { obj.style.transform = 'scale(1) rotate(0deg)'; });
 }
 
-// [먼작귀 클리커 인터랙션]
-function renderClickerInteraction(container) {
+function renderClicker(container) {
   let score = 0;
-  const wrapper = document.createElement('div');
-  wrapper.className = 'clicker-box';
-  wrapper.innerHTML = `
-    <div class="clicker-score" id="score-val">0 HEARTS</div>
-    <div class="clicker-target" id="chiikawa-btn">🐥</div>
-    <p style="font-weight:700; margin-top:12px;">캐릭터를 연속 클릭하여 하트를 모아보세요!</p>
+  container.innerHTML = `
+    <div class="clicker-box">
+      <div class="clicker-score" id="score-text">0 HEARTS</div>
+      <div class="clicker-target" id="click-target">🐥</div>
+      <p style="font-weight:700; margin-top:12px;">연속 클릭하여 하트를 모아보세요!</p>
+    </div>
   `;
-  container.appendChild(wrapper);
 
-  const scoreEl = wrapper.querySelector('#score-val');
-  const btn = wrapper.querySelector('#chiikawa-btn');
+  const scoreText = container.querySelector('#score-text');
+  const target = container.querySelector('#click-target');
 
-  btn.addEventListener('click', (e) => {
+  target.addEventListener('click', (e) => {
     score += 10;
-    scoreEl.textContent = `${score} HEARTS`;
-
-    const heart = document.createElement('span');
-    heart.className = 'bite-effect';
-    heart.textContent = '💖 +10';
-    heart.style.left = `${e.offsetX}px`;
-    heart.style.top = `${e.offsetY}px`;
-    btn.appendChild(heart);
-    setTimeout(() => heart.remove(), 500);
+    scoreText.textContent = `${score} HEARTS`;
+    
+    const h = document.createElement('span');
+    h.className = 'bite-effect';
+    h.textContent = '💖 +10';
+    h.style.left = `${e.offsetX}px`;
+    h.style.top = `${e.offsetY}px`;
+    target.appendChild(h);
+    setTimeout(() => h.remove(), 500);
   });
 }
 
-// [메지루시 인터랙션] 참 위치 드래그 이동
-function renderMejirushiInteraction(container) {
-  const wrapper = document.createElement('div');
-  wrapper.innerHTML = `
-    <div class="mejirushi-workspace">
-      <div class="item-base-umbrella">☂️</div>
-      <div class="draggable-charm" style="left:30%; top:40%;">🎀</div>
-      <div class="draggable-charm" style="left:60%; top:30%;">⭐</div>
-      <div class="draggable-charm" style="left:45%; top:60%;">🧸</div>
+function renderMejirushi(container) {
+  container.innerHTML = `
+    <div style="width:100%">
+      <div class="mejirushi-workspace" id="mejirushi-stage">
+        <div class="item-base-umbrella">☂️</div>
+        <div class="draggable-charm" style="left:30%; top:40%;">🎀</div>
+        <div class="draggable-charm" style="left:60%; top:30%;">⭐</div>
+        <div class="draggable-charm" style="left:45%; top:60%;">🧸</div>
+      </div>
+      <p style="text-align:center; font-weight:700; margin-top:12px;">참을 드래그하여 우산 원하는 위치로 이동시켜 보세요!</p>
     </div>
-    <p style="text-align:center; font-weight:700; margin-top:12px;">우산 손잡이에 메지루시 참을 드래그하여 위치를 자유롭게 맞춰보세요!</p>
   `;
-  container.appendChild(wrapper);
 
-  const charms = wrapper.querySelectorAll('.draggable-charm');
+  const stage = container.querySelector('#mejirushi-stage');
+  const charms = container.querySelectorAll('.draggable-charm');
+
   charms.forEach(charm => {
-    let isDragging = false;
-    let offsetX, offsetY;
+    let active = false, currentX, currentY, initialX, initialY, xOffset = 0, yOffset = 0;
 
     charm.addEventListener('mousedown', (e) => {
-      isDragging = true;
-      offsetX = e.clientX - charm.getBoundingClientRect().left;
-      offsetY = e.clientY - charm.getBoundingClientRect().top;
+      initialX = e.clientX - xOffset;
+      initialY = e.clientY - yOffset;
+      if (e.target === charm) active = true;
     });
 
-    window.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
-      const rect = wrapper.querySelector('.mejirushi-workspace').getBoundingClientRect();
-      let x = e.clientX - rect.left - offsetX;
-      let y = e.clientY - rect.top - offsetY;
-      charm.style.left = `${x}px`;
-      charm.style.top = `${y}px`;
+    stage.addEventListener('mousemove', (e) => {
+      if (active) {
+        e.preventDefault();
+        currentX = e.clientX - initialX;
+        currentY = e.clientY - initialY;
+        xOffset = currentX;
+        yOffset = currentY;
+        charm.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+      }
     });
 
-    window.addEventListener('mouseup', () => { isDragging = false; });
+    window.addEventListener('mouseup', () => { active = false; });
   });
 }
 
-// [동묘 쇼핑 인터랙션] 여러 가게 둘러보기 및 영수증 결과
-function renderDongmyoInteraction(container) {
+function renderDongmyo(container) {
   const cart = [];
-  const stores = [
-    {
-      name: '동묘 구제 옷가게 🧥',
-      items: [
-        { name: '청자켓', price: 15000, icon: '🧥' },
-        { name: '레트로 셔츠', price: 12000, icon: '👔' }
-      ]
-    },
-    {
-      name: '동묘 레트로 소품샵 📻',
-      items: [
-        { name: '빈티지 라디오', price: 25000, icon: '📻' },
-        { name: '카세트 테이프', price: 5000, icon: '📼' }
-      ]
-    }
+  const items = [
+    { name: '청자켓', price: 15000, icon: '🧥' },
+    { name: '레트로 셔츠', price: 12000, icon: '👔' },
+    { name: '빈티지 라디오', price: 25000, icon: '📻' },
+    { name: '카세트 테이프', price: 5000, icon: '📼' }
   ];
 
-  const wrapper = document.createElement('div');
-  wrapper.className = 'dongmyo-wrapper';
-  wrapper.innerHTML = `
-    <div class="shop-items-grid" id="dongmyo-items"></div>
-    <div class="receipt-paper">
-      <h4 style="text-align:center; border-bottom:1px dashed #000; padding-bottom:8px;">[ 동묘 쇼핑 영수증 ]</h4>
-      <div id="receipt-list" style="margin:12px 0;">구매한 상품이 없습니다.</div>
-      <div style="border-top:1px dashed #000; padding-top:8px; font-weight:bold;" id="receipt-total">합계: 0원</div>
+  container.innerHTML = `
+    <div class="dongmyo-wrapper">
+      <div class="shop-items-grid" id="dongmyo-grid"></div>
+      <div class="receipt-paper">
+        <h4 style="text-align:center; border-bottom:1px dashed #000; padding-bottom:8px;">[ 동묘 영수증 ]</h4>
+        <div id="receipt-list" style="margin:12px 0;">장바구니가 비어 있습니다.</div>
+        <div style="border-top:1px dashed #000; padding-top:8px; font-weight:bold;" id="receipt-total">합계: 0원</div>
+      </div>
     </div>
   `;
-  container.appendChild(wrapper);
 
-  const itemsGrid = wrapper.querySelector('#dongmyo-items');
-  const receiptList = wrapper.querySelector('#receipt-list');
-  const receiptTotal = wrapper.querySelector('#receipt-total');
+  const grid = container.querySelector('#dongmyo-grid');
+  const list = container.querySelector('#receipt-list');
+  const total = container.querySelector('#receipt-total');
 
-  stores.forEach(store => {
-    store.items.forEach(item => {
-      const card = document.createElement('div');
-      card.className = 'shop-item-card';
-      card.innerHTML = `<div style="font-size:32px">${item.icon}</div><b>${item.name}</b><div>${item.price.toLocaleString()}원</div>`;
-      card.addEventListener('click', () => {
-        cart.push(item);
-        updateReceipt();
-      });
-      itemsGrid.appendChild(card);
+  items.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'shop-item-card';
+    card.innerHTML = `<div style="font-size:32px">${item.icon}</div><b>${item.name}</b><div>${item.price.toLocaleString()}원</div>`;
+    card.addEventListener('click', () => {
+      cart.push(item);
+      list.innerHTML = cart.map(i => `<div>${i.name} - ${i.price.toLocaleString()}원</div>`).join('');
+      total.textContent = `합계: ${cart.reduce((sum, i) => sum + i.price, 0).toLocaleString()}원`;
     });
+    grid.appendChild(card);
   });
-
-  function updateReceipt() {
-    if (cart.length === 0) return;
-    receiptList.innerHTML = cart.map(i => `<div>${i.name} - ${i.price.toLocaleString()}원</div>`).join('');
-    const total = cart.reduce((sum, i) => sum + i.price, 0);
-    receiptTotal.textContent = `합계: ${total.toLocaleString()}원`;
-  }
 }
 
-// [옥 스타일링 인터랙션] Modern 의류 + 옥 악세사리
-function renderJadeInteraction(container) {
-  const wrapper = document.createElement('div');
-  wrapper.className = 'jade-coordi-wrapper';
-  wrapper.innerHTML = `
-    <div class="mannequin-display">
-      <div id="outfit-layer" style="font-size:70px;">🧥</div>
-      <div id="jade-layer" style="font-size:40px; position:absolute; top:20px;">💍</div>
-    </div>
-    <div class="coordi-controls">
-      <h4>모던 의류 선택</h4>
-      <button class="action-btn" onclick="document.getElementById('outfit-layer').textContent='🧥'">블레이저 자켓</button>
-      <button class="action-btn" onclick="document.getElementById('outfit-layer').textContent='👕'">캐주얼 티셔츠</button>
-      <h4 style="margin-top:12px;">옥 장신구 포인트</h4>
-      <button class="action-btn" style="background:var(--color-fashion)" onclick="document.getElementById('jade-layer').textContent='💍'">옥 반지</button>
-      <button class="action-btn" style="background:var(--color-fashion)" onclick="document.getElementById('jade-layer').textContent='📿'">옥 목걸이</button>
+function renderJade(container) {
+  container.innerHTML = `
+    <div class="jade-coordi-wrapper">
+      <div class="mannequin-display">
+        <div id="outfit-layer" style="font-size:70px;">🧥</div>
+        <div id="jade-layer" style="font-size:40px; position:absolute; top:20px;">💍</div>
+      </div>
+      <div class="coordi-controls">
+        <h4>의류 선택</h4>
+        <button class="action-btn" id="btn-jacket">블레이저 자켓</button>
+        <button class="action-btn" id="btn-tshirt">캐주얼 티셔츠</button>
+        <h4 style="margin-top:12px;">옥 포인트</h4>
+        <button class="action-btn" style="background:var(--color-fashion)" id="btn-ring">옥 반지</button>
+        <button class="action-btn" style="background:var(--color-fashion)" id="btn-necklace">옥 목걸이</button>
+      </div>
     </div>
   `;
-  container.appendChild(wrapper);
+
+  container.querySelector('#btn-jacket').addEventListener('click', () => container.querySelector('#outfit-layer').textContent = '🧥');
+  container.querySelector('#btn-tshirt').addEventListener('click', () => container.querySelector('#outfit-layer').textContent = '👕');
+  container.querySelector('#btn-ring').addEventListener('click', () => container.querySelector('#jade-layer').textContent = '💍');
+  container.querySelector('#btn-necklace').addEventListener('click', () => container.querySelector('#jade-layer').textContent = '📿');
 }
 
-// [젤리슈즈 꾸미기 인터랙션]
-function renderJellyInteraction(container) {
-  const wrapper = document.createElement('div');
-  wrapper.className = 'decor-workspace';
-  wrapper.innerHTML = `
-    <div class="decor-canvas">
-      <span>👡</span>
-      <div id="jelly-charms" style="position:absolute; display:flex; gap:6px;"></div>
+function renderJelly(container) {
+  container.innerHTML = `
+    <div class="decor-workspace">
+      <div class="decor-canvas">
+        <span>👡</span>
+        <div id="jelly-box" style="position:absolute; display:flex; gap:6px;"></div>
+      </div>
+      <div class="charm-palette">
+        <button class="charm-btn">🌸</button>
+        <button class="charm-btn">⭐</button>
+        <button class="charm-btn">🍒</button>
+      </div>
+      <p style="font-weight:700">파츠를 선택해 젤리 슈즈에 달아보세요!</p>
     </div>
-    <div class="charm-palette">
-      <button class="charm-btn">🌸</button>
-      <button class="charm-btn">⭐</button>
-      <button class="charm-btn">🍒</button>
-      <button class="charm-btn">💎</button>
-    </div>
-    <p style="font-weight:700">파츠를 터치해 젤리 슈즈에 꾸며보세요!</p>
   `;
-  container.appendChild(wrapper);
 
-  const charmsBox = wrapper.querySelector('#jelly-charms');
-  wrapper.querySelectorAll('.charm-btn').forEach(btn => {
+  const box = container.querySelector('#jelly-box');
+  container.querySelectorAll('.charm-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      const c = document.createElement('span');
-      c.style.fontSize = '28px';
-      c.textContent = btn.textContent;
-      charmsBox.appendChild(c);
+      const span = document.createElement('span');
+      span.textContent = btn.textContent;
+      box.appendChild(span);
     });
   });
 }
 
-// [볼펜 꾸미기 인터랙션]
-function renderPenInteraction(container) {
-  const wrapper = document.createElement('div');
-  wrapper.className = 'decor-workspace';
-  wrapper.innerHTML = `
-    <div class="decor-canvas">
-      <span>🖊️</span>
-      <div id="pen-charms" style="position:absolute; top:30px; display:flex; flex-direction:column; gap:4px;"></div>
+function renderPen(container) {
+  container.innerHTML = `
+    <div class="decor-workspace">
+      <div class="decor-canvas">
+        <span>🖊️</span>
+        <div id="pen-box" style="position:absolute; top:20px; display:flex; flex-direction:column; gap:4px;"></div>
+      </div>
+      <div class="charm-palette">
+        <button class="charm-btn">🔮</button>
+        <button class="charm-btn">🎀</button>
+        <button class="charm-btn">🐣</button>
+      </div>
+      <p style="font-weight:700">볼펜 상단에 장식 참을 추가해 보세요!</p>
     </div>
-    <div class="charm-palette">
-      <button class="charm-btn">🔮</button>
-      <button class="charm-btn">🎀</button>
-      <button class="charm-btn">🐣</button>
-    </div>
-    <p style="font-weight:700">장식용 클립과 비즈를 볼펜 상단에 조합해보세요!</p>
   `;
-  container.appendChild(wrapper);
 
-  const charmsBox = wrapper.querySelector('#pen-charms');
-  wrapper.querySelectorAll('.charm-btn').forEach(btn => {
+  const box = container.querySelector('#pen-box');
+  container.querySelectorAll('.charm-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      const c = document.createElement('span');
-      c.style.fontSize = '22px';
-      c.textContent = btn.textContent;
-      charmsBox.appendChild(c);
+      const span = document.createElement('span');
+      span.textContent = btn.textContent;
+      box.appendChild(span);
     });
   });
 }
