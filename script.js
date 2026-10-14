@@ -58,10 +58,18 @@ const CATS = {
   fashion: { n: '패션', i: 'bag', d: '입는 것을 넘어 꾸미고 고르는 즐거움. 내 취향대로 조합해보세요.' },
 };
 
+const smooth = pts => {
+  const n = pts.length; let d = `M${pts[0][0]} ${pts[0][1]}`;
+  for (let i = 0; i < n; i++) {
+    const p0 = pts[(i + n - 1) % n], p1 = pts[i], p2 = pts[(i + 1) % n], p3 = pts[(i + 2) % n];
+    d += `C${(p1[0] + (p2[0] - p0[0]) / 6).toFixed(1)} ${(p1[1] + (p2[1] - p0[1]) / 6).toFixed(1)} ${(p2[0] - (p3[0] - p1[0]) / 6).toFixed(1)} ${(p2[1] - (p3[1] - p1[1]) / 6).toFixed(1)} ${p2[0]} ${p2[1]}`;
+  }
+  return `<svg viewBox="-3 -3 106 106" preserveAspectRatio="none"><path d="${d}z"/></svg>`;
+};
 const BLOB = {
-  food: '<svg viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M38 6C52 1 66 0 82 0C94 1 100 8 100 16C100 28 98 40 91 52C83 64 72 70 58 87C52 94 46 99 38 100C30 100 27 92 27 85C26 76 22 70 18 65C10 56 0 45 0 35C0 26 6 20 14 16C22 12 30 8 38 6z"/></svg>',
-  play: '<svg viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M41 2C32 5 24 7 18 12C10 18 5 28 4 41C3 54 8 62 5 74C2 82 -1 90 4 97C10 101 20 100 28 98C42 96 56 96 68 90C82 83 91 75 96 62C101 52 100 42 94 33C88 25 80 21 72 16C64 11 62 6 54 3C50 0 46 0 41 2z"/></svg>',
-  fashion: '<svg viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M55 0C68 2 80 8 88 20C96 30 100 40 99 55C98 70 88 82 78 90C68 98 54 100 40 99C26 98 12 92 6 78C-1 68 -1 52 4 40C10 26 20 16 32 8C40 3 46 0 55 0z"/></svg>',
+  food: smooth([[45, 3], [90, 12], [100, 42], [78, 68], [45, 100], [22, 74], [3, 40], [16, 14]]),
+  play: smooth([[40, 2], [80, 12], [100, 45], [88, 78], [55, 98], [18, 92], [2, 60], [10, 25]]),
+  fashion: smooth([[55, 0], [92, 22], [100, 60], [78, 92], [40, 100], [8, 80], [0, 42], [24, 10]]),
 };
 const LAB = { food: 'FOOD', play: 'PLAY', fashion: 'FASHION' };
 
@@ -517,7 +525,9 @@ function layoutCards(mo) {
     const Q = P.map(p => [p[0] - x0, p[1] - y0]), d = roundedPath(Q, 14), [, , BR, BL] = Q, xt = Math.min(w * .7, 340);
     Object.assign(el.style, { left: x0 + 'px', top: y0 + 'px', width: w + 'px', height: h + 'px', clipPath: `path('${d}')` });
     $('.ol', el).innerHTML = `<path d="${d}"/>`;
-    $('.ct', el).style.bottom = (h - (BL[1] + (BR[1] - BL[1]) * xt / w) + 30) + 'px';
+    const ct = $('.ct', el); ct.classList.remove('nop'); ct.style.bottom = (h - (BL[1] + (BR[1] - BL[1]) * xt / w) + 46) + 'px';
+    const topEdge = g[0][1] * H - y0 + (g[1][1] - g[0][1]) * H * (w - 40) / w;
+    if (h - parseFloat(ct.style.bottom) - ct.offsetHeight < topEdge + 28) ct.classList.add('nop');
   });
 }
 function category(k) {
