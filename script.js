@@ -54,6 +54,8 @@ const CATS = {
   fashion: { n: '패션', i: 'bag', d: '입는 것을 넘어 꾸미고 고르는 즐거움. 내 취향대로 조합해보세요.' },
 };
 
+const LAB = { food: 'FOOD', play: 'PLAY', fashion: 'FASHION' };
+
 /* ---------------- 트렌드 데이터 ---------------- */
 const T = {
   play: [
@@ -372,30 +374,31 @@ const app = $('#app'), nav = $('#nav');
 $('.logo').innerHTML = LOGO;
 
 function home() {
-  app.innerHTML = `<section class="view space">
-        ${Object.keys(CATS).map(k => `<button class="orb ${k}" data-k="${k}" aria-label="${CATS[k].n}"><span class="em">${ic(CATS[k].i)}</span><span class="lb">${CATS[k].n}</span></button>`).join('')}
+  const ks = Object.keys(CATS);
+  app.innerHTML = `<section class="view space">${ks.map(k => `<a class="hb ${k}" href="#/cat/${k}" aria-label="${CATS[k].n}"><div class="shape"></div><div class="txt"><span class="tagp ${k}">${LAB[k]}</span><h2>${CATS[k].n}</h2><p>${CATS[k].d}</p><span class="view-more">VIEW →</span></div></a>`).join('')}
     <div class="ripple"></div>
     <svg class="cursor" viewBox="0 0 24 24"><path d="M5 2l14 11-6.5 1.2L9.8 21z" fill="#FEFEFE" stroke="#1C1C20" stroke-width="1.5" stroke-linejoin="round"/></svg>
-    <div class="tip">행성을 클릭해보세요</div></section>`;
-  const sp = $('.space'); $$('.orb', sp).forEach(o => o.onclick = () => location.hash = '#/cat/' + o.dataset.k);
+    <div class="tip">오브젝트를 클릭해보세요</div></section>`;
+  const sp = $('.space');
   space3d(sp);
+  if (!$('.gl', sp)) $$('.shape', sp).forEach((s, i) => s.innerHTML = ic(CATS[ks[i]].i));
   tutorial(sp);
 }
 
 async function tutorial(sp) {
-  const cur = $('.cursor', sp), rp = $('.ripple', sp), tip = $('.tip', sp), orbs = $$('.orb', sp); let stop = false, i = 0;
+  const cur = $('.cursor', sp), rp = $('.ripple', sp), tip = $('.tip', sp), orbs = $$('.hb', sp); let stop = false, i = 0;
   orbs.forEach(o => o.addEventListener('pointerenter', () => { stop = true; cur.remove(); rp.remove(); tip.classList.add('off'); }));
   await sleep(900);
   while (!stop && sp.isConnected) {
-    const o = orbs[i++ % 3], r = o.getBoundingClientRect(), s = sp.getBoundingClientRect();
-    const x = r.left - s.left + r.width * .58, y = r.top - s.top + r.height * .5;
+    const o = orbs[i++ % 3], r = $('.shape', o).getBoundingClientRect(), s = sp.getBoundingClientRect();
+    const x = r.left - s.left + r.width * .5, y = r.top - s.top + r.height * .5;
     try {
       await cur.animate([{ transform: `translate(${s.width * .5}px,${s.height * .95}px)`, opacity: 0 }, { opacity: 1, offset: .2 }, { transform: `translate(${x}px,${y}px)`, opacity: 1 }], { duration: 1500, easing: 'ease-in-out', fill: 'forwards' }).finished;
       if (stop) break;
       rp.style.left = x + 'px'; rp.style.top = y + 'px';
       rp.animate([{ transform: 'scale(.4)', opacity: 1 }, { transform: 'scale(2)', opacity: 0 }], 700);
       sp.dispatchEvent(new CustomEvent('pulse', { detail: orbs.indexOf(o) }));
-      o.animate([{ scale: 1 }, { scale: .9 }, { scale: 1.08 }, { scale: 1 }], 500);
+      $('.shape', o).animate([{ scale: 1 }, { scale: .9 }, { scale: 1.08 }, { scale: 1 }], 500);
       await sleep(1200); if (stop) break;
       await cur.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards' }).finished;
       await sleep(500);
@@ -405,8 +408,8 @@ async function tutorial(sp) {
 
 function category(k) {
   const C = CATS[k];
-  app.innerHTML = `<section class="view cat"><div class="band dark"><div class="cat-head"><div><h2>${C.n}</h2><p>${C.d}</p></div><div class="big">${ic(C.i)}</div></div></div>
-    <div class="band light"><div class="grid">${T[k].map((t, i) => `<a class="card" href="#/t/${k}/${i}"><div class="thumb">${ic(t.i, t.c)}</div><h3>${t.t}</h3><p>${t.lead.split('.')[0]}.</p></a>`).join('')}</div></div></section>`;
+  app.innerHTML = `<section class="view cat2"><div class="cat2-head"><span class="tagp ${k}">${LAB[k]}</span><h2>${C.n}</h2><p>${C.d}</p></div>
+    <div class="mosaic">${T[k].map((t, i) => `<a class="c2${t.img ? ' has-img' : ''}" href="#/t/${k}/${i}"><div class="ph"${t.img ? ` style="background-image:url(${t.img})"` : ''}></div><div class="ct"><h3>${t.t}</h3><p>${t.lead.split('.')[0]}.</p><span class="view-more">VIEW MORE →</span></div></a>`).join('')}</div></section>`;
 }
 
 function trend(k, i) {
@@ -433,16 +436,16 @@ addEventListener('hashchange', route);
 route();
 
 /* ---------------- 메인 3D (Three.js r128) ----------------
-   먹거리=고리 두른 라면 그릇 / 놀거리=고리 두른 게임 컨트롤러 / 패션=고리 두른 쇼핑백
-   각 3D 오브젝트 위에 투명한 .orb 버튼을 겹쳐 클릭·키보드·튜토리얼을 그대로 사용 */
+   먹거리=라면 그릇 / 놀거리=게임 컨트롤러 / 패션=모자+선글라스.
+   각 .hb 블록 안의 .shape(도형) 중심에 오브젝트를 올려둔다(DOM 위치를 읽어 3D 좌표로 변환). */
 function space3d(sp) {
   if (typeof THREE === 'undefined') return;
   let R; try { R = new THREE.WebGLRenderer({ antialias: true, alpha: true }); } catch (e) { return; }
   R.setPixelRatio(Math.min(devicePixelRatio, 2)); R.outputEncoding = THREE.sRGBEncoding;
-  const cv = R.domElement; cv.className = 'gl'; sp.insertBefore(cv, $('.orb', sp));
+  const cv = R.domElement; cv.className = 'gl'; sp.appendChild(cv);
   const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(45, 1, .1, 100); cam.position.z = 10;
-  scene.add(new THREE.AmbientLight(0xffffff, .8));
-  const dl = new THREE.DirectionalLight(0xffffff, .9); dl.position.set(3, 5, 6); scene.add(dl);
+  scene.add(new THREE.AmbientLight(0xffffff, .85));
+  const dl = new THREE.DirectionalLight(0xffffff, .8); dl.position.set(3, 5, 6); scene.add(dl);
   const S = r => new THREE.SphereGeometry(r, 32, 24), B = (x, y, z) => new THREE.BoxGeometry(x, y, z);
   const add = (g, geo, col, pos = [0, 0, 0], sc = [1, 1, 1]) => {
     const m = new THREE.Mesh(geo, typeof col === 'object' ? col : new THREE.MeshStandardMaterial({ color: col, roughness: .4 }));
@@ -452,60 +455,56 @@ function space3d(sp) {
     add(g, new THREE.LatheGeometry([[0, -.7], [.55, -.7], [.9, -.45], [1.25, .35], [1.32, .5], [1.2, .5], [.85, -.3], [0, -.35]].map(p => new THREE.Vector2(...p)), 48),
       new THREE.MeshStandardMaterial({ color: 0xFFEA00, roughness: .35, side: THREE.DoubleSide }));
     add(g, new THREE.CircleGeometry(1.1, 40), 0xE8472B, [0, .3, 0]).rotation.x = -Math.PI / 2;
-    add(g, new THREE.TorusGeometry(.45, .09,10, 30), 0xFFD27A, [.25, .34, -.1]).rotation.x = Math.PI / 2;
+    add(g, new THREE.TorusGeometry(.45, .09, 10, 30), 0xFFD27A, [.25, .34, -.1]).rotation.x = Math.PI / 2;
     add(g, S(.3), 0xFEFEFE, [-.4, .4, .2], [1, .7, 1]); add(g, S(.14), 0xFFB300, [-.4, .55, .2]);
     add(g, S(.25), 0x4CAF50, [.55, .42, .5], [1, .6, 1]);
     [.3, .6].forEach(z => add(g, new THREE.CylinderGeometry(.04, .04, 2.9, 8), 0x1C1C20, [0, .62, z]).rotation.z = Math.PI / 2);
   };
   const play = g => {
-    add(g, S(1), 0x1C94F5, [0, 0, 0], [1.55, .7, .95]);
-    [-1, 1].forEach(s => add(g, S(.55), 0x1C94F5, [s * 1.05, -.5, 0], [.8, 1.25, .9]));
-    add(g, B(.55, .12, .16), 0x1C1C20, [-.7, .62, .05]); add(g, B(.16, .12, .55), 0x1C1C20, [-.7, .62, .05]);
-    [[.2, 0, 0xF65AC2], [-.2, 0, 0xFFEA00], [0, .2, 0xFEFEFE], [0, -.2, 0x1C1C20]].forEach(([x, z, c]) => add(g, S(.12), c, [.75 + x, .6, .05 + z]));
+    add(g, S(1), 0x1C94F5, [0, 0, 0], [1.45, .45, .85]);
+    [-1, 1].forEach(s => add(g, S(1), 0x1C94F5, [s * 1.0, -.02, .62], [.5, .42, .95]));
+    add(g, B(.55, .1, .17), 0xFEFEFE, [-.75, .43, -.1]); add(g, B(.17, .1, .55), 0xFEFEFE, [-.75, .43, -.1]);
+    [[.2, 0, 0xF65AC2], [-.2, 0, 0xFFEA00], [0, .2, 0x7BE0B0], [0, -.2, 0xFEFEFE]].forEach(([x, z, c]) => add(g, S(.12), c, [.75 + x, .43, -.1 + z]));
+    [-.4, .4].forEach(x => add(g, new THREE.CylinderGeometry(.17, .2, .14, 20), 0x1C1C20, [x, .43, .35]));
   };
   const fashion = g => {
-    add(g, B(1.5, 1.7, .7), 0xF65AC2, [0, -.1, 0]); add(g, B(1.52, .2, .72), 0xFEFEFE, [0, .25, 0]);
-    add(g, new THREE.TorusGeometry(.45, .07, 12, 40, Math.PI), 0x1C1C20, [0, .75, 0]);
-    add(g, B(.7, .4, .02), 0xFFEA00, [0, -.45, .37]); add(g, S(.15), 0x1C94F5, [.55, .55, .45]);
+    add(g, new THREE.SphereGeometry(1.1, 32, 20, 0, Math.PI * 2, 0, Math.PI / 2), new THREE.MeshStandardMaterial({ color: 0xF65AC2, roughness: .5, side: THREE.DoubleSide }), [0, 0, 0], [1, .9, 1]);
+    add(g, new THREE.CylinderGeometry(1.2, 1.2, .1, 32, 1, false, -Math.PI / 2, Math.PI), 0xE04AAE, [0, -.02, .05], [1, 1, 1.45]);
+    add(g, S(.12), 0xFEFEFE, [0, .98, 0]);
+    [-1, 1].forEach(s => { add(g, S(1), 0xFEFEFE, [s * .65, -.95, 1.0], [.55, .4, .1]); add(g, S(1), 0x1C1C20, [s * .65, -.95, 1.07], [.46, .32, .06]); });
+    add(g, B(.3, .07, .07), 0xFEFEFE, [0, -.88, 1.0]);
   };
-  const objs = [['food', food, 0xFFF47A, .45], ['play', play, 0x7CC6FB, .9], ['fashion', fashion, 0xFBA0DE, .12]].map(([k, fn, rc, tx], i) => {
-    const root = new THREE.Group(), tilt = new THREE.Group(), spin = new THREE.Group(), piv = new THREE.Group(), rs = new THREE.Group();
-    fn(spin); tilt.rotation.x = tx; tilt.add(spin); root.add(tilt);
-    add(rs, new THREE.TorusGeometry(2.2, .06, 16, 120), new THREE.MeshStandardMaterial({ color: rc, roughness: .3, metalness: .3 }));
-    add(rs, S(.17), 0xFEFEFE, [2.2, 0, 0]);
-    piv.rotation.set(1.15, 0, (i - 1) * .35); piv.add(rs); root.add(piv); scene.add(root);
-    return { k, root, spin, rs, h: 0, p: 0, s: 1, x: 0, y: 0, b: $(`.orb.${k}`, sp) };
+  const objs = [['food', food, .5, 0], ['play', play, 1.0, 0], ['fashion', fashion, .35, .15]].map(([k, fn, tx, ty]) => {
+    const root = new THREE.Group(), tilt = new THREE.Group(), spin = new THREE.Group();
+    fn(spin); tilt.rotation.x = tx; tilt.position.y = ty; tilt.add(spin); root.add(tilt); scene.add(root);
+    const b = $(`.hb.${k}`, sp);
+    return { root, tilt, spin, tx, h: 0, p: 0, yaw: 0, s: 1, b, sh: $('.shape', b) };
   });
 
   let W, H, pu;
-  const size = () => {
-    W = sp.clientWidth; H = sp.clientHeight; R.setSize(W, H, false); cam.aspect = W / H; cam.updateProjectionMatrix();
-    const hh = 8.284, w = hh * W / H; pu = H / hh;
-    const port = W / H < .9, s = port ? Math.min(.62, w / 7.5) : Math.min(1, w / 14);
-    const P = port ? [[-w * .24, -2.7], [0, .9], [w * .24, -2.7]] : [[-w * .3, -.6], [0, .4], [w * .3, -.6]];
-    objs.forEach((o, i) => { o.x = P[i][0]; o.y = P[i][1]; o.s = s * (i === 1 ? 1.12 : 1); });
-  };
-  size(); addEventListener('resize', size);
+  const size = () => { W = sp.clientWidth; H = sp.clientHeight; R.setSize(W, H, false); cam.aspect = W / H; cam.updateProjectionMatrix(); pu = H / 8.284; };
+  size(); const ro = new ResizeObserver(size); ro.observe(sp);
 
-  const mouse = { x: 0, y: 0 }, vec = new THREE.Vector3(); let hov = -1, t0 = performance.now(), raf;
+  const mouse = { x: 0, y: 0 }; let hov = -1, t0 = performance.now();
   sp.addEventListener('pointermove', e => { const r = sp.getBoundingClientRect(); mouse.x = (e.clientX - r.left) / r.width - .5; mouse.y = (e.clientY - r.top) / r.height - .5; });
   sp.addEventListener('pulse', e => objs[e.detail].p = 1);
-  objs.forEach((o, i) => { o.b.classList.add('d3'); ['pointerenter', 'focus'].forEach(ev => o.b.addEventListener(ev, () => hov = i)); ['pointerleave', 'blur'].forEach(ev => o.b.addEventListener(ev, () => hov = -1)); });
+  objs.forEach((o, i) => { ['pointerenter', 'focus'].forEach(ev => o.b.addEventListener(ev, () => hov = i)); ['pointerleave', 'blur'].forEach(ev => o.b.addEventListener(ev, () => hov = -1)); });
 
   const tick = t => {
-    if (!sp.isConnected) { removeEventListener('resize', size); R.dispose(); return; }
+    if (!sp.isConnected) { ro.disconnect(); R.dispose(); return; }
     const d = Math.min((t - t0) / 1000, .05); t0 = t;
-    cam.position.x += (mouse.x * 1.4 - cam.position.x) * .05; cam.position.y += (-mouse.y * .9 - cam.position.y) * .05; cam.lookAt(0, 0, 0);
+    const sr = sp.getBoundingClientRect();
     objs.forEach((o, i) => {
-      o.h += ((hov === i ? 1 : 0) - o.h) * .12; o.p *= .9;
-      o.root.scale.setScalar(o.s * (1 + .14 * o.h - .14 * o.p));
-      o.spin.rotation.y += d * (.5 + o.h * 1.5); o.rs.rotation.z += d * .6;
-      o.root.position.set(o.x, o.y + Math.sin(t / 900 + i * 2) * .12, 0);
-      vec.copy(o.root.position).project(cam);
-      const D = 4.8 * o.s * pu, x = (vec.x * .5 + .5) * W, y = (-vec.y * .5 + .5) * H;
-      Object.assign(o.b.style, { left: x - D / 2 + 'px', top: y - D / 2 + 'px', width: D + 'px', height: D + 'px' });
+      const r = o.sh.getBoundingClientRect();   // 도형 중심 → 3D 좌표
+      const cx = r.left - sr.left + r.width / 2, cy = r.top - sr.top + r.height / 2;
+      o.s = Math.min(r.width, r.height) * .78 / (3.3 * pu);
+      o.h += ((hov === i ? 1 : 0) - o.h) * .12; o.p *= .9; o.yaw += d * o.h * 3;
+      o.root.scale.setScalar(o.s * (1 + .12 * o.h - .14 * o.p));
+      o.root.position.set((cx - W / 2) / pu, -(cy - H / 2) / pu + Math.sin(t / 900 + i * 2) * .1, 0);
+      o.spin.rotation.y = Math.sin(t / 1400 + i * 2) * .4 + mouse.x * .5 + o.yaw;
+      o.tilt.rotation.x = o.tx + mouse.y * .25;
     });
-    R.render(scene, cam); raf = requestAnimationFrame(tick);
+    R.render(scene, cam); requestAnimationFrame(tick);
   };
-  raf = requestAnimationFrame(tick);
+  requestAnimationFrame(tick);
 }
