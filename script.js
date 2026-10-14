@@ -579,7 +579,7 @@ function space3d(sp) {
     objs.forEach((o, i) => {
       const r = o.sh.getBoundingClientRect();   // 도형 중심 → 3D 좌표
       const cx = r.left - sr.left + r.width / 2, cy = r.top - sr.top + r.height / 2;
-      o.s = Math.min(r.width, r.height) * 1.3 / (3.3 * pu);
+      o.s = Math.min(r.width, r.height) * 1.0 / (3.3 * pu);
       o.h += ((hov === i ? 1 : 0) - o.h) * .12; o.p *= .9; o.yaw += d * o.h * 3;
       o.root.scale.setScalar(o.s * (1 + .12 * o.h - .14 * o.p));
       o.root.position.set((cx - W / 2) / pu, -(cy - H / 2) / pu + Math.sin(t / 900 + i * 2) * .1, 0);
