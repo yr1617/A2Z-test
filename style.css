@@ -178,9 +178,10 @@ main{min-height:100%}
 
 /* ---------- 상세 : 세로형 ---------- */
 .tw{max-width:860px;margin:0 auto;padding:96px 24px 90px}
-.tw h1{font-size:clamp(30px,4vw,46px);font-weight:800;line-height:1.1;margin:6px 0 14px}
-.tw .lead{font-size:17px;font-weight:700;line-height:1.6;margin-bottom:16px}
-.tw .tx{font-size:15px;line-height:1.95;margin-bottom:12px}
+.tw .back{margin-bottom:44px}
+.tw h1{font-size:clamp(30px,4vw,46px);font-weight:800;line-height:1.1;margin:0 0 22px}
+.tw .lead{font-size:18px;font-weight:800;line-height:1.55;margin-bottom:40px}
+.tw .tx{font-size:15px;line-height:1.8;margin-bottom:22px;color:var(--g5)}
 
 /* ---------- 인터랙션 부품 ---------- */
 .sqwrap{width:min(250px,62vw);aspect-ratio:1}
@@ -218,7 +219,7 @@ main{min-height:100%}
 .receipt h4{font-size:16px;font-weight:800}.receipt hr{border:0;border-top:2px dashed var(--g2);margin:10px 0}
 .rl{display:flex;justify-content:space-between;text-align:left}
 .dgs{touch-action:none}.dg{cursor:grab}.dg.lift{cursor:grabbing}
-.cat2-head .tagp,.tw .back{margin-bottom:0}
+.cat2-head .tagp{margin-bottom:0}
 @media(max-width:820px){.tw{padding:84px 18px 70px}}
 
 
@@ -252,7 +253,7 @@ main{min-height:100%}
 }
 
 /* ---------- 메인 : 스크롤 안내 + 사이트 소개 ---------- */
-.cue{position:absolute;z-index:4;left:3%;bottom:5%;display:inline-flex;align-items:center;gap:10px;padding:8px 20px;border-radius:var(--r-pill);box-shadow:inset 0 0 0 2px var(--ink);background:var(--paper);color:var(--ink);font-weight:800;font-size:12px;letter-spacing:.06em;transition:.15s}
+.cue{position:absolute;z-index:4;right:3%;bottom:5%;display:inline-flex;align-items:center;gap:10px;padding:8px 20px;border-radius:var(--r-pill);box-shadow:inset 0 0 0 2px var(--ink);background:var(--paper);color:var(--ink);font-weight:800;font-size:12px;letter-spacing:.06em;transition:.15s}
 .cue:hover{background:var(--ink);color:var(--paper)}
 .cue svg{animation:cue 1.2s ease-in-out infinite alternate}
 @keyframes cue{from{transform:translateY(-2px)}to{transform:translateY(3px)}}
@@ -285,6 +286,11 @@ main{min-height:100%}
 .ab-top{display:table;margin:clamp(48px,6vw,80px) auto 0;padding:8px 24px;border-radius:var(--r-pill);box-shadow:inset 0 0 0 2px var(--paper);color:var(--paper);font-weight:800;font-size:13px;transition:.15s}
 .ab-top:hover{background:var(--paper);color:var(--ink)}
 @media(max-width:820px){
-  .cue{left:20px;bottom:24px}
+  .cue{right:20px;bottom:24px}
   .ab-grid,.ab-how,.ab-cats{grid-template-columns:1fr}
 }
+
+/* 메인 : 오브젝트 옆 VIEW → 텍스트 버튼 */
+.vlink{display:inline-flex;align-items:center;gap:8px;margin-top:14px;font-weight:800;font-size:13px;letter-spacing:.04em;color:var(--ink);padding-bottom:2px;border-bottom:2px solid transparent;transition:gap .2s,border-color .2s}
+.hb:hover .vlink,.hb:focus-visible .vlink{gap:14px;border-bottom-color:var(--ink)}
+.vlink svg{display:block}
