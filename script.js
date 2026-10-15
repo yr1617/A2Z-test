@@ -467,7 +467,7 @@ const app = $('#app'), nav = $('#nav');
 $('.logo').innerHTML = LOGO;
 
 const burst = (n, ro, ri) => { let p = ''; for (let i = 0; i < n * 2; i++) { const a = Math.PI * i / n - Math.PI / 2, r = i % 2 ? ri : ro; p += `${i ? 'L' : 'M'}${(50 + r * Math.cos(a)).toFixed(1)} ${(50 + r * Math.sin(a)).toFixed(1)}`; } return p + 'z'; };
-const BADGE = { food: ['FOOD', '맛보기', '#FFEA00', K], play: ['PLAY', '만지기', '#1C94F5', W], fashion: ['FASHION', '꾸미기', '#F65AC2', K] };
+const BADGE = { food: ['FOOD', '맛보기', '#FFEA00', K], play: ['PLAY', '즐기기', '#1C94F5', W], fashion: ['FASHION', '꾸미기', '#F65AC2', K] };
 const badge = k => { const [en, ko, c, tc] = BADGE[k]; return `<span class="bd"><svg viewBox="0 0 100 100"><path d="${burst(14, 48, 36)}" fill="${c}" stroke="${K}" stroke-width="1.6" stroke-linejoin="round"/><text x="50" y="48" text-anchor="middle" font-size="${en.length > 5 ? 12 : 16}" font-weight="800" fill="${tc}" font-family="SUIT Variable,sans-serif">${en}</text><text x="50" y="63" text-anchor="middle" font-size="11" font-weight="800" fill="${tc}" font-family="SUIT Variable,sans-serif">${ko}</text></svg></span>`; };
 const POP = [[10, 36, 'burst', '#FFEA00', 34], [66, 11, 'spark', '#1C94F5', 30], [36, 80, 'dot', '#FFEA00', 24], [93, 24, 'ring', '#F65AC2', 26], [53, 58, 'spark', '#F65AC2', 22], [24, 88, 'burst', '#1C94F5', 22]];
 const popSvg = (t, c) => t === 'burst' ? `<svg viewBox="0 0 100 100"><path d="${burst(8, 48, 26)}" fill="${c}" stroke="${K}" stroke-width="3" stroke-linejoin="round"/></svg>`
@@ -475,12 +475,37 @@ const popSvg = (t, c) => t === 'burst' ? `<svg viewBox="0 0 100 100"><path d="${
   : `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="${t === 'dot' ? c : 'none'}" stroke="${t === 'dot' ? K : c}" stroke-width="${t === 'dot' ? 1.4 : 3}"/></svg>`;
 const pops = () => POP.map(([x, y, t, c, w]) => `<span class="pp" style="left:${x}%;top:${y}%;width:${w}px">${popSvg(t, c)}</span>`).join('');
 
+const ABOUT_STEPS = { food: ['읽고', '맛보고'], play: ['읽고', '즐기고'], fashion: ['읽고', '꾸미고'] };
+function about(ks) {
+  const cat = k => `<a class="ab-cat ${k}" href="#/cat/${k}"><span class="tagp ${k}">${LAB[k]}</span><h4>${CATS[k].n}</h4><p>${CATS[k].d}</p><span class="view-more">VIEW →</span></a>`;
+  return `<section class="about" id="about">
+    <div class="ab-in">
+      <div class="ab-head">
+        <span class="ab-kick">ABOUT A2Z</span>
+        <h2 class="ab-logo"><span>A</span><em>2</em><span>Z</span></h2>
+        <p class="ab-sub">A to Z에서 <b>to</b>를 <b>2</b>로 바꿨어요.<br>A부터 Z까지, 전 세대가 함께 최신 트렌드를 경험하는 놀이터예요.</p>
+      </div>
+      <div class="ab-grid">
+        <div class="ab-card why"><span class="tagp play">NAME</span><h3>왜 A2Z일까요?</h3><p>가장 앞의 A부터 맨 끝의 Z까지, 알파벳 전체를 다 아우르듯 <b>모든 세대</b>가 한자리에 모인다는 뜻이에요. 가운데의 <em>to</em>는 숫자 <em>2</em>로 바꿔서, 세대와 세대 사이를 잇는 다리이자 &lsquo;둘이 함께&rsquo;라는 의미를 담았어요.</p></div>
+        <div class="ab-card young"><span class="tagp food">10대 · 20대</span><h3>마음껏 즐겨요</h3><p>지금 가장 핫한 유행을 읽고 직접 해보면서 내 취향을 마음껏 즐겨보세요.</p></div>
+        <div class="ab-card elder"><span class="tagp fashion">윗세대</span><h3>왜 좋아하는지 공감해요</h3><p>직접 체험해 보면 &ldquo;요즘 애들은 왜 이런 걸 좋아할까?&rdquo; 하던 궁금증이 &ldquo;아, 그래서 좋아하는구나&rdquo; 하는 공감으로 바뀌어요.</p></div>
+      </div>
+      <div class="ab-how">
+        <div class="ab-how-t"><span class="ab-kick">HOW IT WORKS</span><h3>세 가지 카테고리,<br>읽고 바로 체험해요</h3><p>카테고리마다 요즘 유행하는 트렌드를 골라 설명을 읽고, 그 자리에서 간단한 체험까지 해볼 수 있어요.</p></div>
+        <div class="ab-cats">${ks.map(cat).join('')}</div>
+      </div>
+      <a class="ab-top" href="#/" onclick="scrollTo({top:0,behavior:'smooth'});return false">↑ 처음으로</a>
+    </div>
+  </section>`;
+}
+
 function home() {
   const ks = Object.keys(CATS);
-  app.innerHTML = `<section class="view space"><div class="disc"><span>01</span><b>DISCOVER</b></div>${pops()}${ks.map(k => `<a class="hb ${k}" href="#/cat/${k}" aria-label="${CATS[k].n}"><div class="shape">${BLOB[k]}</div>${badge(k)}<div class="txt"><span class="tagp ${k}">${LAB[k]}</span><h2>${CATS[k].n}</h2><p>${CATS[k].d}</p><span class="view-more">VIEW →</span></div></a>`).join('')}
+  app.innerHTML = `<section class="view space">${pops()}${ks.map(k => `<a class="hb ${k}" href="#/cat/${k}" aria-label="${CATS[k].n}"><div class="shape">${BLOB[k]}</div>${badge(k)}<div class="txt"><span class="tagp ${k}">${LAB[k]}</span><h2>${CATS[k].n}</h2><p>${CATS[k].d}</p><span class="view-more">VIEW →</span></div></a>`).join('')}
     <div class="ripple"></div>
     <svg class="cursor" viewBox="0 0 24 24"><path d="M5 2l14 11-6.5 1.2L9.8 21z" fill="#FEFEFE" stroke="#1C1C20" stroke-width="1.5" stroke-linejoin="round"/></svg>
-    <div class="tip">오브젝트를 클릭해보세요</div></section>`;
+    <div class="tip">오브젝트를 클릭해보세요</div>
+    <a class="cue" href="#about" aria-label="사이트 소개로 스크롤"><span>SCROLL</span><svg viewBox="0 0 12 16" width="12" height="16"><path d="M6 1v13M1.5 9.5L6 14l4.5-4.5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></a></section>${about(ks)}`;
   const sp = $('.space');
   space3d(sp);
   if (!$('.gl', sp)) $$('.shape', sp).forEach((s, i) => s.insertAdjacentHTML('beforeend', ic(CATS[ks[i]].i)));
@@ -564,6 +589,10 @@ function route() {
   scrollTo(0, 0);
   if (!cat) home(); else if (a === 'cat') category(k); else trend(k, +i || 0);
 }
+document.addEventListener('click', e => {
+  const a = e.target.closest('a.cue'); if (!a) return;
+  e.preventDefault(); const t = $('#about'); if (t) t.scrollIntoView({ behavior: 'smooth' });
+});
 addEventListener('hashchange', route);
 route();
 
