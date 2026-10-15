@@ -67,9 +67,9 @@ const smooth = pts => {
   return `<svg viewBox="-3 -3 106 106" preserveAspectRatio="none"><path d="${d}z"/></svg>`;
 };
 const BLOB = {
-  food: smooth([[45, 3], [90, 12], [100, 42], [78, 68], [45, 100], [22, 74], [3, 40], [16, 14]]),
-  play: smooth([[40, 2], [80, 12], [100, 45], [88, 78], [55, 98], [18, 92], [2, 60], [10, 25]]),
-  fashion: smooth([[55, 0], [92, 22], [100, 60], [78, 92], [40, 100], [8, 80], [0, 42], [24, 10]]),
+  food: smooth([[30, 8], [70, 2], [100, 20], [97, 52], [72, 74], [52, 100], [36, 82], [27, 58], [2, 42], [8, 18]]),
+  play: smooth([[46, 0], [80, 6], [100, 32], [96, 66], [70, 86], [40, 100], [8, 94], [12, 62], [0, 30], [22, 12]]),
+  fashion: smooth([[58, 0], [96, 24], [100, 66], [68, 100], [22, 94], [0, 50], [24, 10]]),
 };
 const LAB = { food: 'FOOD', play: 'PLAY', fashion: 'FASHION' };
 
@@ -466,9 +466,18 @@ const X = {
 const app = $('#app'), nav = $('#nav');
 $('.logo').innerHTML = LOGO;
 
+const burst = (n, ro, ri) => { let p = ''; for (let i = 0; i < n * 2; i++) { const a = Math.PI * i / n - Math.PI / 2, r = i % 2 ? ri : ro; p += `${i ? 'L' : 'M'}${(50 + r * Math.cos(a)).toFixed(1)} ${(50 + r * Math.sin(a)).toFixed(1)}`; } return p + 'z'; };
+const BADGE = { food: ['FOOD', '맛보기', '#FFEA00', K], play: ['PLAY', '만지기', '#1C94F5', W], fashion: ['FASHION', '꾸미기', '#F65AC2', K] };
+const badge = k => { const [en, ko, c, tc] = BADGE[k]; return `<span class="bd"><svg viewBox="0 0 100 100"><path d="${burst(14, 48, 36)}" fill="${c}" stroke="${K}" stroke-width="1.6" stroke-linejoin="round"/><text x="50" y="48" text-anchor="middle" font-size="${en.length > 5 ? 12 : 16}" font-weight="800" fill="${tc}" font-family="SUIT Variable,sans-serif">${en}</text><text x="50" y="63" text-anchor="middle" font-size="11" font-weight="800" fill="${tc}" font-family="SUIT Variable,sans-serif">${ko}</text></svg></span>`; };
+const POP = [[10, 36, 'burst', '#FFEA00', 34], [66, 11, 'spark', '#1C94F5', 30], [36, 80, 'dot', '#FFEA00', 24], [93, 24, 'ring', '#F65AC2', 26], [53, 58, 'spark', '#F65AC2', 22], [24, 88, 'burst', '#1C94F5', 22]];
+const popSvg = (t, c) => t === 'burst' ? `<svg viewBox="0 0 100 100"><path d="${burst(8, 48, 26)}" fill="${c}" stroke="${K}" stroke-width="3" stroke-linejoin="round"/></svg>`
+  : t === 'spark' ? `<svg viewBox="0 0 24 24"><path d="M12 1C13 8 16 11 23 12C16 13 13 16 12 23C11 16 8 13 1 12C8 11 11 8 12 1z" fill="${c}" stroke="${K}" stroke-width="1.2" stroke-linejoin="round"/></svg>`
+  : `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="${t === 'dot' ? c : 'none'}" stroke="${t === 'dot' ? K : c}" stroke-width="${t === 'dot' ? 1.4 : 3}"/></svg>`;
+const pops = () => POP.map(([x, y, t, c, w]) => `<span class="pp" style="left:${x}%;top:${y}%;width:${w}px">${popSvg(t, c)}</span>`).join('');
+
 function home() {
   const ks = Object.keys(CATS);
-  app.innerHTML = `<section class="view space">${ks.map(k => `<a class="hb ${k}" href="#/cat/${k}" aria-label="${CATS[k].n}"><div class="shape">${BLOB[k]}</div><div class="txt"><span class="tagp ${k}">${LAB[k]}</span><h2>${CATS[k].n}</h2><p>${CATS[k].d}</p><span class="view-more">VIEW →</span></div></a>`).join('')}
+  app.innerHTML = `<section class="view space"><div class="disc"><span>01</span><b>DISCOVER</b></div>${pops()}${ks.map(k => `<a class="hb ${k}" href="#/cat/${k}" aria-label="${CATS[k].n}"><div class="shape">${BLOB[k]}</div>${badge(k)}<div class="txt"><span class="tagp ${k}">${LAB[k]}</span><h2>${CATS[k].n}</h2><p>${CATS[k].d}</p><span class="view-more">VIEW →</span></div></a>`).join('')}
     <div class="ripple"></div>
     <svg class="cursor" viewBox="0 0 24 24"><path d="M5 2l14 11-6.5 1.2L9.8 21z" fill="#FEFEFE" stroke="#1C1C20" stroke-width="1.5" stroke-linejoin="round"/></svg>
     <div class="tip">오브젝트를 클릭해보세요</div></section>`;
